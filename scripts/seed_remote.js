@@ -118,10 +118,9 @@ const PASSWORD = "chickydoo12";
         // 1.5 Repair Users Schema
         console.log("\nRepairing Users Schema...");
         try {
+            // Fetch fresh collection to get current fields
             const collection = await pb.collections.getOne('users');
 
-            // Explicitly define ALL fields we want, to ensure name/avatar exist
-            // We start with existing fields but filter out any duplicates we might add
             const existingNames = new Set(collection.fields.map(f => f.name));
 
             const fieldsToAdd = [
@@ -130,25 +129,37 @@ const PASSWORD = "chickydoo12";
                 { name: "role", type: "text" },
                 { name: "institution", type: "text" },
                 { name: "website", type: "url" },
-                { name: "priority", type: "number" }
+                { name: "priority", type: "number" },
+                // Membership Fields
+                { name: "stripe_customer_id", type: "text" },
+                { name: "membership_type", type: "select", options: { values: ["student", "regular"], maxSelect: 1 } },
+                { name: "membership_expiry", type: "date" }
             ];
 
             const newFields = [...collection.fields];
+            let addedCount = 0;
 
             for (const f of fieldsToAdd) {
                 if (!existingNames.has(f.name)) {
                     newFields.push(f);
+                    addedCount++;
                 }
             }
 
-            await pb.collections.update(collection.id, {
-                fields: newFields,
-                listRule: "", // Public list
-                viewRule: ""  // Public view
-            });
-            console.log("✅ Users schema and API rules updated (Public Read + Name/Avatar).");
+            if (addedCount > 0) {
+                console.log(`Adding ${addedCount} new fields...`);
+                await pb.collections.update(collection.id, {
+                    fields: newFields,
+                    listRule: "", // Public list
+                    viewRule: ""  // Public view
+                });
+                console.log("✅ Users schema updated successfully.");
+            } else {
+                console.log("ℹ️  No new fields to add.");
+            }
         } catch (e) {
             console.log("⚠️  Failed to update users schema:", e.message);
+            if (e.data) console.log(JSON.stringify(e.data, null, 2));
         }
 
         // 2. Seed Users

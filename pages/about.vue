@@ -15,15 +15,15 @@
               {{ (person.name || '?').charAt(0) }}
             </div>
             <div>
-              <h3 class="text-base font-semibold leading-7 tracking-tight text-slate-900">
-                <a v-if="person.website" :href="person.website" target="_blank" class="hover:text-blue-600 transition-colors">
+              <h3 class="text-base font-semibold leading-7 tracking-tight text-neutral-900">
+                <a v-if="person.website" :href="person.website" target="_blank" class="hover:text-red-800 transition-colors">
                   {{ person.name }}
                 </a>
                 <span v-else>{{ person.name || 'Unknown' }}</span>
               </h3>
-              <p class="text-sm font-semibold text-blue-600">{{ person.role }}</p>
-              <p class="text-sm text-slate-600">{{ person.institution }}</p>
-              <a v-if="person.email" :href="'mailto:' + person.email" class="text-sm text-slate-500 hover:text-slate-900 block mt-1">
+              <p class="text-sm font-semibold text-red-800">{{ person.role }}</p>
+              <p class="text-sm text-neutral-600">{{ person.institution }}</p>
+              <a v-if="person.email" :href="'mailto:' + person.email" class="text-sm text-neutral-500 hover:text-neutral-900 block mt-1">
                 {{ person.email }}
               </a>
             </div>
@@ -39,10 +39,12 @@ const pb = usePocketBase()
 
 const { data: team } = await useAsyncData('team', async () => {
   // Fetch users who have a role assigned, sorted by priority
-  const records = await pb.collection('users').getFullList({
+  let records = await pb.collection('users').getFullList({
     sort: 'priority',
     filter: 'role != ""'
   });
+
   return records;
 })
 </script>
+```

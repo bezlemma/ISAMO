@@ -22,3 +22,7 @@ logs
 .env
 .env.*
 !.env.example
+
+# Sensitive Scripts (contain credentials)
+scripts/seed_remote.js
+scripts/upload_avatars.js

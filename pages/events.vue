@@ -35,23 +35,24 @@
           <div v-else class="w-full h-full flex items-center justify-center bg-slate-100 text-slate-400">
             <span class="text-4xl">📅</span>
           </div>
-          
-          <!-- Date Badge -->
-          <div class="absolute top-4 right-4 bg-white/90 backdrop-blur border border-slate-200 px-3 py-1 rounded-lg text-sm font-mono text-blue-600 shadow-sm">
-            {{ new Date(event.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) }}
-          </div>
         </div>
 
         <div class="p-6">
-          <h3 class="text-xl font-bold mb-2 text-slate-900 group-hover:text-blue-600 transition-colors">{{ event.title }}</h3>
-          <div class="prose prose-slate prose-sm mb-4 line-clamp-3" v-html="event.description"></div>
+          <div class="flex items-center text-sm text-neutral-500 mb-4">
+            <svg class="mr-1.5 h-5 w-5 text-red-800" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0h18M5.25 12h13.5" />
+            </svg>
+            {{ new Date(event.date).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) }}
+          </div>
           
-          <a v-if="event.link" 
-             :href="event.link" 
-             target="_blank"
-             class="inline-flex items-center text-sm font-semibold text-blue-400 hover:text-blue-300">
-            View Details 
-            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+          <h3 class="text-xl font-bold text-neutral-900 group-hover:text-red-800 transition-colors mb-2">
+            {{ event.title }}
+          </h3>
+          
+          <div class="prose prose-sm prose-neutral mb-4 line-clamp-3" v-html="event.description"></div>
+          
+          <a v-if="event.link" :href="event.link" target="_blank" class="inline-flex items-center text-sm font-semibold text-red-800 hover:text-red-700">
+            Learn more <span aria-hidden="true" class="ml-1">&rarr;</span>
           </a>
         </div>
       </div>
