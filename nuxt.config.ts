@@ -7,5 +7,8 @@ export default defineNuxtConfig({
     public: {
       pocketbaseUrl: 'https://isamo.pockethost.io/'
     }
+  },
+  app: {
+    baseURL: '/ISAMO/'
   }
 })
