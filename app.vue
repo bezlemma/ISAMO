@@ -49,7 +49,7 @@ useSeoMeta({
 
 useHead({
   link: [
-    { rel: 'icon', type: 'image/jpeg', href: '/Ruby.jpeg' }
+    { rel: 'icon', type: 'image/jpeg', href: '/ISAMO/Ruby.jpeg' }
   ]
 })
 
