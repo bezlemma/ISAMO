@@ -29,7 +29,7 @@
         <!-- Event Image -->
         <div class="aspect-video bg-slate-100 relative overflow-hidden">
           <img v-if="event.image" 
-               :src="pb.files.getUrl(event, event.image)" 
+               :src="pb.files.getURL(event, event.image)" 
                :alt="event.title"
                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
           <div v-else class="w-full h-full flex items-center justify-center bg-slate-100 text-slate-400">
