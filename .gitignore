@@ -26,3 +26,5 @@ logs
 # Sensitive Scripts (contain credentials)
 scripts/seed_remote.js
 scripts/upload_avatars.js
+scripts/create_admins.js
+scripts/update_member_passwords.js

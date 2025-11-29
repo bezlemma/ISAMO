@@ -27,6 +27,32 @@ routerAdd("POST", "/stripe-webhook", (c) => {
             user.set("stripe_customer_id", customerId);
             $app.dao().saveRecord(user);
 
+            // Send Welcome Email
+            try {
+                const email = new MailerMessage({
+                    from: {
+                        address: $app.settings().meta.senderAddress,
+                        name: $app.settings().meta.senderName,
+                    },
+                    to: [{ address: user.email() }],
+                    subject: "Welcome to ISAMO!",
+                    html: `
+                        <h1>Welcome to ISAMO!</h1>
+                        <p>Dear ${user.getString("name") || "Member"},</p>
+                        <p>Thank you for joining the International Society for Avian Model Organisms. Your membership is now <strong>Active</strong>.</p>
+                        <p>You can now access all member resources and event registrations.</p>
+                        <p>
+                            <a href="https://isamo.org/membership" style="background-color: #991B1B; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Go to Dashboard</a>
+                        </p>
+                        <p>Best regards,<br>The ISAMO Team</p>
+                    `,
+                });
+                $app.newMailClient().send(email);
+                console.log(`✅ Sent welcome email to ${user.email()}`);
+            } catch (mailError) {
+                console.log("⚠️ Failed to send welcome email:", mailError);
+            }
+
             return c.json(200, { success: true });
         } catch (e) {
             return c.json(404, { error: "User not found" });

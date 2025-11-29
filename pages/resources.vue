@@ -9,7 +9,7 @@
       <!-- GEISHA -->
       <a href="http://geisha.arizona.edu/geisha/" target="_blank" class="group block bg-white border border-neutral-200 rounded-2xl p-8 hover:border-red-200 transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-red-900/5">
         <h3 class="text-2xl font-bold mb-3 text-neutral-900 group-hover:text-red-800 transition-colors">GEISHA</h3>
-        <p class="text-neutral-600 mb-4">Gallus Expression in Situ Hybridization Analysis. A comprehensive database of gene expression in the chicken embryo.</p>
+        <p class="text-neutral-600 mb-4">Gallus Expression in Situ Hybridization Analysis. A comprehensive ISH database in the chicken embryo.</p>
         <span class="text-red-800 font-semibold text-sm flex items-center">
           Visit Database <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
         </span>
@@ -18,7 +18,7 @@
       <!-- ChickyBase -->
       <a href="https://bezlemma.github.io/ChickyBase/" target="_blank" class="group block bg-white border border-neutral-200 rounded-2xl p-8 hover:border-red-200 transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-red-900/5">
         <h3 class="text-2xl font-bold mb-3 text-neutral-900 group-hover:text-red-800 transition-colors">ChickyBase</h3>
-        <p class="text-neutral-600 mb-4">A modern gene atlas for the chicken model system, featuring interactive expression data and resources.</p>
+        <p class="text-neutral-600 mb-4">Bezia Lemma's backup ISH atlas for the chicken model system.</p>
         <span class="text-red-800 font-semibold text-sm flex items-center">
           Visit Database <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
         </span>
