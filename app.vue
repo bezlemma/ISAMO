@@ -18,6 +18,28 @@
               <NuxtLink v-if="user?.role" to="/admin/stats" class="px-3 py-2 rounded-md text-sm font-medium text-red-800 bg-red-50 hover:bg-red-100 transition-colors" active-class="bg-red-100 font-bold">Admin Stats</NuxtLink>
             </div>
           </div>
+          <div class="-mr-2 flex md:hidden">
+            <button @click="isOpen = !isOpen" type="button" class="bg-white inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" aria-controls="mobile-menu" :aria-expanded="isOpen">
+              <span class="sr-only">Open main menu</span>
+              <svg :class="{'hidden': isOpen, 'block': !isOpen }" class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+              <svg :class="{'block': isOpen, 'hidden': !isOpen }" class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div v-show="isOpen" class="md:hidden" id="mobile-menu">
+        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-b border-neutral-200 shadow-lg">
+          <NuxtLink to="/" class="block px-3 py-2 rounded-md text-base font-medium text-neutral-600 hover:text-red-800 hover:bg-gray-50" active-class="text-red-800 font-bold bg-red-50" @click="isOpen = false">Home</NuxtLink>
+          <NuxtLink to="/about" class="block px-3 py-2 rounded-md text-base font-medium text-neutral-600 hover:text-red-800 hover:bg-gray-50" active-class="text-red-800 font-bold bg-red-50" @click="isOpen = false">About</NuxtLink>
+          <NuxtLink to="/events" class="block px-3 py-2 rounded-md text-base font-medium text-neutral-600 hover:text-red-800 hover:bg-gray-50" active-class="text-red-800 font-bold bg-red-50" @click="isOpen = false">Events</NuxtLink>
+          <NuxtLink to="/resources" class="block px-3 py-2 rounded-md text-base font-medium text-neutral-600 hover:text-red-800 hover:bg-gray-50" active-class="text-red-800 font-bold bg-red-50" @click="isOpen = false">Resources</NuxtLink>
+          <NuxtLink to="/membership" class="block px-3 py-2 rounded-md text-base font-medium text-neutral-600 hover:text-red-800 hover:bg-gray-50" active-class="text-red-800 font-bold bg-red-50" @click="isOpen = false">Membership</NuxtLink>
+          <NuxtLink v-if="user?.role" to="/admin/stats" class="block px-3 py-2 rounded-md text-base font-medium text-red-800 bg-red-50 hover:bg-red-100" active-class="bg-red-100 font-bold" @click="isOpen = false">Admin Stats</NuxtLink>
         </div>
       </div>
     </nav>
@@ -28,6 +50,7 @@
 <script setup>
 const pb = usePocketBase();
 const user = ref(pb.authStore.model);
+const isOpen = ref(false);
 
 // Listen for auth changes to update the UI reactively
 pb.authStore.onChange(() => {
@@ -52,15 +75,4 @@ useHead({
     { rel: 'icon', type: 'image/jpeg', href: '/ISAMO/Ruby.jpeg' }
   ]
 })
-
-// Note: Since we don't have the domain yet, I'm using a placeholder. 
-// Ideally, we should use useRequestURL() to get the origin if dynamic, or a config variable.
-// For now, I'll use a relative path which some crawlers support, or just hardcode the likely production URL if known.
-// Actually, Nuxt's useSeoMeta handles relative paths for og:image if configured correctly, but often absolute is best.
-// I will use '/Ruby.jpeg' and let the browser/crawler resolve it against the base URL if possible, 
-// but for social cards, absolute URLs are strictly required.
-// I'll assume the site will be at isamo.org or similar. 
-// Let's use a computed property or just '/Ruby.jpeg' and hope the meta tag generator handles the host.
-// Nuxt 3 useSeoMeta doesn't auto-prepend host to og:image string.
-// I'll leave it as '/Ruby.jpeg' for now, but add a TODO to update domain.
 </script>
