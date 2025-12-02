@@ -3,7 +3,7 @@
     <!-- Background Image -->
     <div class="absolute inset-0 z-0 flex items-center justify-center pointer-events-none">
       <!-- Chicken Image with blend mode to sit better on white -->
-      <img src="/Ruby.jpeg" alt="Background" class="h-[85%] w-auto object-contain opacity-80 mix-blend-multiply" />
+      <img src="/Ruby.png" alt="Background" class="h-[85%] w-auto object-contain opacity-80 mix-blend-multiply" />
       <!-- Subtle white gradient at the bottom to fade it out if needed -->
       <div class="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent"></div>
     </div>

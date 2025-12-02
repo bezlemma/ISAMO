@@ -57,22 +57,10 @@ pb.authStore.onChange(() => {
   user.value = pb.authStore.model;
 });
 
-// Global SEO Configuration
-useSeoMeta({
-  title: 'ISAMO - International Society for Avian Model Organisms',
-  ogTitle: 'ISAMO - International Society for Avian Model Organisms',
-  description: 'Promoting and advancing research using avian models. Join the community of researchers dedicated to avian biology.',
-  ogDescription: 'Promoting and advancing research using avian models. Join the community of researchers dedicated to avian biology.',
-  ogImage: 'https://isamo.org/Ruby.jpeg', // Assuming domain, or use relative if handled by Nuxt Image, but absolute is safer for OG
-  twitterCard: 'summary_large_image',
-  twitterTitle: 'ISAMO',
-  twitterDescription: 'International Society for Avian Model Organisms',
-  twitterImage: 'https://isamo.org/Ruby.jpeg'
-});
 
 useHead({
   link: [
-    { rel: 'icon', type: 'image/jpeg', href: '/ISAMO/Ruby.jpeg' }
+    { rel: 'icon', type: 'image/png', href: '/ISAMO/Ruby.png' }
   ]
 })
 </script>
