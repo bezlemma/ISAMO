@@ -1,0 +1,46 @@
+# Nuxt dev/build outputs
+.output
+.data
+.nuxt
+.nitro
+.cache
+dist
+preview-dist
+tmp
+backend/
+.dev.vars
+.dev.vars.*
+.wrangler/
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+*.bundle
+*.pem
+*.key
+
+# Node dependencies
+node_modules
+
+# Logs
+logs
+*.log
+
+# Misc
+.DS_Store
+.fleet
+.idea
+
+# Local env files
+.env
+.env.*
+!.env.example
+
+# Sensitive Scripts (contain credentials)
+scripts/seed_remote.js
+scripts/upload_avatars.js
+scripts/create_admins.js
+scripts/update_member_passwords.js
+scripts/add_membership_fields.js
+scripts/check_user_role.js
+scripts/debug_schema.js

@@ -1,0 +1,14 @@
+title = "ISAMO secret scanning"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "hardcoded-password"
+description = "Password or server secret assigned directly in source"
+regex = '''(?i)(?:password(?:confirm)?|auth_pepper|smtp_password)\s*[:=]\s*['"]([^'"\r\n]{8,})['"]'''
+secretGroup = 1
+
+[[rules.allowlists]]
+description = "Documented fictional test credentials"
+paths = ['''^tests/''', '''^community/local-server\.mjs$''']

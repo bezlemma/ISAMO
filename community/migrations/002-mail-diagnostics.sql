@@ -1,0 +1,1 @@
+ALTER TABLE email_outbox ADD COLUMN last_error TEXT NOT NULL DEFAULT '';

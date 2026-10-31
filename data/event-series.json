@@ -1,0 +1,5 @@
+[
+  { "id": "ams", "name": "AMS meeting", "description": "The 13th Avian Model Systems meeting will take place at Nagoya University, Japan, on 7–9 October 2027.", "url": "https://avian-japan2027.agr.nagoya-u.ac.jp/index.html", "linkLabel": "Visit the 2027 meeting website" },
+  { "id": "egged", "name": "EGGED", "description": "The Edinburgh Gallus Genomics and Embryonic Development workshop brings researchers together for practical training in chicken embryology.", "url": "https://vet.ed.ac.uk/roslin/engagement/facilities/national-avian-research-facility/events/egged2024", "linkLabel": "About the workshop (2024 programme)" },
+  { "id": "seminar", "name": "Avian Seminar Series", "description": "Online research seminars from the avian research community. Find announcements and participation details through the Avian Researcher Network.", "url": "https://avianresearch.tidyhq.com/", "linkLabel": "Seminar announcements" }
+]

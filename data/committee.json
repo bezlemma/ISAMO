@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Ruth Williams",
+    "role": "Chair",
+    "institution": "University of Manchester"
+  },
+  {
+    "name": "Michael Piacentino",
+    "role": "Secretary",
+    "institution": "Johns Hopkins Medicine"
+  },
+  {
+    "name": "Güneş Taylor",
+    "role": "Treasurer",
+    "institution": "University of Edinburgh",
+    "website": "https://www.gunestaylor.com",
+    "avatar": "gunes.avif"
+  },
+  {
+    "name": "Bezia Lemma",
+    "role": "Vice Chair – Membership",
+    "institution": "Princeton University",
+    "website": "https://bezialemma.com/",
+    "avatar": "bezia.png"
+  },
+  {
+    "name": "Melanie White",
+    "role": "Vice Chair – Communications",
+    "institution": "University of Queensland",
+    "avatar": "mel.jpeg"
+  }
+]

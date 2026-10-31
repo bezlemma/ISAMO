@@ -1,0 +1,139 @@
+[
+  {
+    "name": "GEISHA",
+    "category": "Expression and anatomy",
+    "url": "https://geisha.arizona.edu/geisha/",
+    "description": "Search the source chicken embryo in situ hybridization collection by gene, anatomy, and stage."
+  },
+  {
+    "name": "ChickyBase",
+    "category": "Expression and anatomy",
+    "url": "https://chickybase.com/",
+    "description": "Search chicken expression images by gene, anatomy, and embryonic stage; compare patterns and explore transcriptomics."
+  },
+  {
+    "name": "GEISHA anatomy browser",
+    "category": "Expression and anatomy",
+    "url": "https://geisha.arizona.edu/anatomies.jsp",
+    "description": "Browse embryonic structures and find their associated gene-expression records."
+  },
+  {
+    "name": "ChickenGTEx",
+    "category": "Transcriptomics",
+    "url": "https://ngdc.cncb.ac.cn/chickengtex/",
+    "description": "Explore tissue expression, single-cell data, regulatory variants, and chicken trait associations."
+  },
+  {
+    "name": "Williams chick single-cell atlas",
+    "category": "Transcriptomics",
+    "url": "https://singlecell.broadinstitute.org/single_cell/study/SCP1570",
+    "description": "Explore the original early chick embryo and neural plate border atlas."
+  },
+  {
+    "name": "Gene Expression Omnibus: chicken",
+    "category": "Transcriptomics",
+    "url": "https://www.ncbi.nlm.nih.gov/gds/?term=Gallus+gallus%5BOrganism%5D",
+    "description": "Find deposited chicken expression studies, processed tables, and links to sequencing reads."
+  },
+  {
+    "name": "Ensembl chicken",
+    "category": "Genomes and gene names",
+    "url": "https://www.ensembl.org/genome/GCA_016699485.1",
+    "description": "Browse the GRCg7b chicken genome, gene models, homologues, and downloadable sequences."
+  },
+  {
+    "name": "National Center for Biotechnology Information · chicken genomes",
+    "category": "Genomes and gene names",
+    "url": "https://www.ncbi.nlm.nih.gov/datasets/genome/?taxon=9031",
+    "description": "Find chicken genome assemblies, annotation releases, and sequence downloads."
+  },
+  {
+    "name": "University of California, Santa Cruz · bird genome browsers",
+    "category": "Genomes and gene names",
+    "url": "https://hgdownload.soe.ucsc.edu/hubs/birds/index.html",
+    "description": "Choose a chicken assembly and open its genome browser and annotation tracks."
+  },
+  {
+    "name": "Chicken Gene Nomenclature Consortium",
+    "category": "Genomes and gene names",
+    "url": "https://www.birdgenenames.org/downloads.jsp",
+    "description": "Look up chicken gene symbols and download mappings to NCBI and Ensembl identifiers."
+  },
+  {
+    "name": "FAANG Data Portal",
+    "category": "Genomes and gene names",
+    "url": "https://data.faang.org/",
+    "description": "Find biosamples, experiments, and datasets from the Functional Annotation of Animal Genomes project, including chicken."
+  },
+  {
+    "name": "Roslin Institute · National Avian Research Facility",
+    "category": "Research facilities",
+    "url": "https://vet.ed.ac.uk/roslin/engagement/facilities/national-avian-research-facility/avian-resources/poultry-lines",
+    "description": "Explore research poultry lines and information about obtaining fertile eggs and chicks.",
+    "location": "Edinburgh, United Kingdom"
+  },
+  {
+    "name": "GEISHA bird-line directory",
+    "category": "Research materials",
+    "url": "https://geisha.arizona.edu/transgenic_birds.jsp",
+    "description": "Find fluorescent reporter and other genetically edited avian lines and their source facilities."
+  },
+  {
+    "name": "PubMed: chicken embryology",
+    "category": "Literature",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/?term=%28chick+OR+chicken%29+embryo",
+    "description": "Search the current literature on chick embryos and developmental biology."
+  },
+  {
+    "name": "Europe PMC",
+    "category": "Literature",
+    "url": "https://europepmc.org/search?query=chicken%20embryo",
+    "description": "Find articles, preprints, open full text, and associated research data."
+  },
+  {
+    "name": "Nagoya University · Avian Bioscience Research Center",
+    "category": "Research facilities",
+    "location": "Nagoya, Japan",
+    "url": "https://www.agr.nagoya-u.ac.jp/~abrc/abrc-E/index.html",
+    "description": "Maintains and distributes chicken and quail genetic resources through Japan’s National BioResource Project."
+  },
+  {
+    "name": "National BioResource Project · Chicken and Quail",
+    "category": "Research materials",
+    "location": "Japan",
+    "url": "https://www.agr.nagoya-u.ac.jp/~nbrp/en/index.html",
+    "description": "Browse chicken and quail strains, including inbred lines, reporter lines, and disease models, with information on requesting resources."
+  },
+  {
+    "name": "University of California, Davis · Avian Facilities",
+    "category": "Research facilities",
+    "location": "Davis, United States",
+    "url": "https://animalscience.ucdavis.edu/facilities/avian",
+    "description": "Avian research facilities and a hatchery supplying fertile eggs for research, including distinct genetic lines."
+  },
+  {
+    "name": "Pirbright Institute · Biggs Avian Research Building",
+    "category": "Research facilities",
+    "location": "Surrey, United Kingdom",
+    "url": "https://www.pirbright.ac.uk/facilities-and-resources/specialist-science-facilities/biggs-avian-research-building",
+    "description": "A poultry research facility supporting studies of avian infectious disease, animal health, and welfare."
+  },
+  {
+    "name": "Quail Anatomy Portal",
+    "category": "Expression and anatomy",
+    "url": "https://quail.anatomyportal.org/",
+    "description": "Explore three-dimensional quail anatomy for research and teaching."
+  },
+  {
+    "name": "GallUSA",
+    "category": "Research materials",
+    "url": "https://gallusa.com/",
+    "description": "Repository for genetic lines in the USA and distributor for transgenic eggs for research"
+  },
+  {
+    "name": "Gallus Genetic Resource Center",
+    "category": "Research materials",
+    "url": "https://gallusresources.org/",
+    "description": "Repository for genetic lines in the USA and distributor for transgenic eggs for research"
+  }
+]

@@ -1,0 +1,53 @@
+name: Deploy approved ISAMO demo
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm run check:repository
+      - run: npm test
+      - name: Generate production demo
+        run: |
+          test -n "$NUXT_PUBLIC_COMMUNITY_KEY"
+          npm run generate
+        env:
+          NUXT_PUBLIC_COMMUNITY_URL: https://isamo-community.darien0.workers.dev
+          NUXT_PUBLIC_COMMUNITY_KEY: ${{ secrets.ISAMO_COMMUNITY_KEY }}
+      - name: Encrypt all pages and assets
+        run: npm run protect
+        env:
+          ISAMO_DEMO_PASSWORD: ${{ secrets.ISAMO_DEMO_PASSWORD }}
+      - uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
+      - uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
+        with:
+          path: ./preview-dist
+      - name: Deploy approved demo
+        id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
