@@ -3,9 +3,14 @@
   let registration;
   const ready=(async()=>{
     if(!('serviceWorker'in navigator)||!window.crypto?.subtle)throw new Error('Open this preview in a current browser over HTTPS.');
-    registration=await navigator.serviceWorker.register('/preview-worker.js',{scope:'/',updateViaCache:'none'});
+    const workerURL=new URL('/preview-worker.js?v=__BUILD_VERSION__',location.href).href;
+    registration=await navigator.serviceWorker.register(workerURL,{scope:'/',updateViaCache:'none'});
     await navigator.serviceWorker.ready;
-    if(!navigator.serviceWorker.controller)await new Promise(resolve=>navigator.serviceWorker.addEventListener('controllerchange',resolve,{once:true}));
+    if(navigator.serviceWorker.controller?.scriptURL!==workerURL)await new Promise((resolve,reject)=>{
+      const changed=()=>{if(navigator.serviceWorker.controller?.scriptURL===workerURL){clearTimeout(timeout);navigator.serviceWorker.removeEventListener('controllerchange',changed);resolve();}};
+      const timeout=setTimeout(()=>{navigator.serviceWorker.removeEventListener('controllerchange',changed);reject(new Error('The demo update could not be loaded. Reload this page to try again.'));},20000);
+      navigator.serviceWorker.addEventListener('controllerchange',changed);changed();
+    });
   })();
   ready.catch(e=>{error.textContent=e.message;button.disabled=true;});
   form.addEventListener('submit',async event=>{
