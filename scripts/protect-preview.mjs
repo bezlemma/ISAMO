@@ -29,7 +29,8 @@ export async function protect({source = path.join(root,'.output/public'), output
     count++;
     return id;
   }
-  const login = await readFile(path.join(root,'hosting/login.html'),'utf8');
+  const template = async file => (await readFile(path.join(root,'hosting',file),'utf8')).replaceAll('__BUILD_VERSION__',version);
+  const login = await template('login.html');
   for (const file of await readdir(source,{recursive:true,withFileTypes:true})) {
     if (!file.isFile()) continue;
     const full = path.join(file.parentPath,file.name);
@@ -49,7 +50,7 @@ export async function protect({source = path.join(root,'.output/public'), output
   }
   const manifest = await pack(Buffer.from(JSON.stringify({version,files})));
   await writeFile(path.join(output,'_preview/config.json'),JSON.stringify({version,salt:salt.toString('base64'),iterations:ITERATIONS,manifest,session_hours:4}));
-  for (const file of ['login.html','login.js','session.js']) await writeFile(path.join(output,'_preview',file),await readFile(path.join(root,'hosting',file)));
+  for (const file of ['login.html','login.js','session.js']) await writeFile(path.join(output,'_preview',file),await template(file));
   await writeFile(path.join(output,'preview-worker.js'),(await readFile(path.join(root,'hosting/worker.js'),'utf8')).replace('__BUILD_VERSION__',version));
   for (const file of ['index.html','404.html']) await writeFile(path.join(output,file),login);
   await writeFile(path.join(output,'robots.txt'),'User-agent: *\nDisallow: /\n');

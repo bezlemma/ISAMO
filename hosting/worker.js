@@ -1,8 +1,9 @@
 const BUILD_VERSION='__BUILD_VERSION__';
 let configPromise,sessionPromise;
 const decoder=new TextDecoder();
-async function config(){
-  if(!configPromise)configPromise=fetch('/_preview/config.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('Preview configuration unavailable');return r.json();});
+async function config(refresh=false){
+  if(refresh)configPromise=null;
+  if(!configPromise)configPromise=fetch('/_preview/config.json?build='+BUILD_VERSION+'&check='+Date.now(),{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('Preview configuration unavailable');return r.json();});
   return configPromise;
 }
 function database(){return new Promise((resolve,reject)=>{const request=indexedDB.open('isamo-preview-access',1);request.onupgradeneeded=()=>request.result.createObjectStore('session');request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error);});}
@@ -40,7 +41,7 @@ self.addEventListener('message',event=>{
     if(event.data?.type==='status'){reply({ok:!!await session()});return;}
     if(event.data?.type!=='unlock')return;
     try{
-      const settings=await config();
+      const settings=await config(true);
       const material=await crypto.subtle.importKey('raw',new TextEncoder().encode(event.data.password),'PBKDF2',false,['deriveKey']);
       const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt:Uint8Array.from(atob(settings.salt),c=>c.charCodeAt(0)),iterations:settings.iterations,hash:'SHA-256'},material,{name:'AES-GCM',length:256},false,['decrypt']);
       const manifest=JSON.parse(decoder.decode(await plaintext(settings.manifest,key)));

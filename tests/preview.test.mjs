@@ -1,9 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {randomBytes} from 'node:crypto';
+import {randomBytes,webcrypto} from 'node:crypto';
 import {mkdir,readFile,writeFile,readdir,rm} from 'node:fs/promises';
 import path from 'node:path';
-import {gunzipSync} from 'node:zlib';
+import {gunzipSync,gzipSync} from 'node:zlib';
+import {createContext,runInContext} from 'node:vm';
 import {deriveKey,encrypt,decrypt} from '../scripts/preview-crypto.mjs';
 import {protect} from '../scripts/protect-preview.mjs';
 
@@ -13,6 +14,43 @@ test('encrypted data rejects the wrong password and tampering',()=>{
   assert.equal(cipher.includes(plain),false);
   assert.throws(()=>decrypt(cipher,deriveKey('wrong test password',salt)));
   cipher[15]^=1;assert.throws(()=>decrypt(cipher,key));
+});
+
+test('an open browser can unlock a replacement release after caching the previous configuration',async()=>{
+  const password='test-only-release-password';
+  function release(version){
+    const salt=randomBytes(16),key=deriveKey(password,salt);
+    return {
+      config:{version,salt:salt.toString('base64'),iterations:600000,manifest:version,session_hours:4},
+      manifest:encrypt(gzipSync(JSON.stringify({version,files:{}})),key),
+    };
+  }
+  const previous=release('previous'),replacement=release('replacement');
+  let current=previous,saved;
+  const handlers=new Map();
+  const context=createContext({
+    crypto:webcrypto,TextEncoder,TextDecoder,Blob,Response,DecompressionStream,URL,atob,
+    self:{addEventListener:(name,handler)=>handlers.set(name,handler),clients:{matchAll:async()=>[]}},
+    fetch:async url=>{
+      if(url.startsWith('/_preview/config.json'))return Response.json(current.config);
+      return url===`/_preview/payload/${current.config.manifest}.bin`
+        ?new Response(current.manifest):new Response('Not found',{status:404});
+    },
+  });
+  runInContext(await readFile('hosting/worker.js','utf8'),context);
+  context.storedSession=async(action,value)=>{if(action==='put')saved=value;else if(action==='delete')saved=undefined;return saved;};
+  async function message(data){
+    let pending,result;
+    handlers.get('message')({data,ports:[{postMessage:value=>result=value}],waitUntil:promise=>pending=promise});
+    await pending;return result;
+  }
+  assert.equal((await message({type:'status'})).ok,false);
+  current=replacement;
+  assert.equal((await message({type:'unlock',password})).ok,true);
+  assert.equal(saved.version,'replacement');
+  await message({type:'lock'});
+  assert.equal((await message({type:'unlock',password:'wrong password'})).ok,false);
+  assert.equal((await message({type:'status'})).ok,false);
 });
 
 test('every published route and asset is protected, including direct deep links',async()=>{
