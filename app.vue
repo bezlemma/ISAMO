@@ -47,14 +47,6 @@
       </div>
     </nav>
     <main id="main-content"><NuxtPage /></main>
-    <footer class="border-t border-neutral-200 px-6 pt-8 pb-24 bg-white">
-      <div class="max-w-7xl mx-auto flex flex-col sm:flex-row gap-5 justify-between text-sm">
-        <p class="text-neutral-500">International Society for Avian Model Organisms</p>
-        <div class="flex flex-wrap gap-5">
-          <a href="https://chickybase.com/" target="_blank" rel="noopener noreferrer" class="text-red-800 font-semibold hover:underline">ChickyBase ↗</a>
-        </div>
-      </div>
-    </footer>
   </div>
 </template>
 
@@ -63,7 +55,7 @@ const isOpen = ref(false);
 
 useHead({
   link: [
-    { rel: 'icon', type: 'image/png', href: useRuntimeConfig().app.baseURL + 'Ruby.png' }
+    { rel: 'icon', type: 'image/png', sizes: '64x64', href: useRuntimeConfig().app.baseURL + 'favicon.png' }
   ]
 })
 </script>

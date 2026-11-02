@@ -2,12 +2,14 @@
   {
     "name": "Ruth Williams",
     "role": "Chair",
-    "institution": "University of Manchester"
+    "institution": "University of Manchester",
+    "avatar": "Ruth.png"
   },
   {
     "name": "Michael Piacentino",
     "role": "Secretary",
-    "institution": "Johns Hopkins Medicine"
+    "institution": "Johns Hopkins Medicine",
+    "avatar": "Michael.png"
   },
   {
     "name": "Güneş Taylor",
@@ -27,6 +29,6 @@
     "name": "Melanie White",
     "role": "Vice Chair – Communications",
     "institution": "University of Queensland",
-    "avatar": "mel.jpeg"
+    "avatar": "Melanie.png"
   }
 ]

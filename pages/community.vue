@@ -34,7 +34,7 @@
       <h2 class="text-2xl font-bold mb-4 break-words">{{ post.title }}</h2>
       <p v-if="post.kind === 'event'" class="text-red-800 font-semibold mb-3">{{ formatDate(post.event_date + 'T12:00:00') }}</p>
       <p class="whitespace-pre-wrap break-words text-neutral-700 leading-7">{{ post.body }}</p>
-      <a v-if="post.link" :href="post.link" target="_blank" rel="noopener noreferrer" class="inline-block text-red-800 font-semibold underline mt-4">Visit website ↗</a>
+      <a v-if="post.link" :href="post.link" target="_blank" rel="noopener noreferrer" class="inline-block text-red-800 font-semibold underline mt-4">Visit website</a>
       <div class="flex flex-wrap gap-5 text-sm mt-6">
         <button @click="toggleReplies(post.id)" class="text-red-800 font-semibold">{{ openReplies === post.id ? 'Hide Replies' : 'Replies' }}</button>
         <template v-if="member && (member.id === post.author_id || member.is_admin)"><button @click="editPost(post)" class="text-neutral-600">Edit</button><button @click="remove(post.id)" class="text-neutral-600">Remove</button></template>
