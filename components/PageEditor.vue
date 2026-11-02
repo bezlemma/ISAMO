@@ -6,7 +6,7 @@
       <template v-for="field in definition.fields" :key="field.key">
         <fieldset v-if="field.type === 'list'" class="space-y-4">
           <legend class="text-xl font-semibold mb-4">{{ field.label }}</legend>
-          <details v-for="(item, index) in draft[field.key]" :key="field.key + '-' + index" :open="field.fixed || !item.name" class="border border-neutral-200 rounded-xl p-4">
+          <details v-for="(item, index) in draft[field.key]" :key="field.key + '-' + index" :open="field.fixed || item._expanded" class="border border-neutral-200 rounded-xl p-4">
             <summary class="font-semibold cursor-pointer">{{ item.name || 'New ' + field.singular }}</summary>
             <div class="space-y-4 mt-4">
               <PageEditorField v-for="child in field.fields.filter(child => child.key !== 'id')" :key="child.key" v-model="item[child.key]" :field="child" :id="pageId + '-' + field.key + '-' + index + '-' + child.key" />
@@ -36,7 +36,7 @@ async function begin() {
   try { await refresh(); draft.value = JSON.parse(JSON.stringify(content.value)); expectedRevision = revision.value; original = JSON.stringify(draft.value); editing.value = true; }
   catch (e) { error.value = e.message; } finally { busy.value = false; }
 }
-function add(field) { draft.value[field.key].push(Object.fromEntries(field.fields.map(child => [child.key, '']))); }
+function add(field) { draft.value[field.key].push({ ...Object.fromEntries(field.fields.map(child => [child.key, ''])), _expanded: true }); }
 function move(key, index, direction) { const rows = draft.value[key]; rows.splice(index + direction, 0, rows.splice(index, 1)[0]); }
 async function cancel() { editing.value = false; error.value = ''; try { await refresh(); } catch {} }
 async function publish() {
