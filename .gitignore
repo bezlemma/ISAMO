@@ -21,6 +21,10 @@ backend/
 
 # Node dependencies
 node_modules
+package-lock.json
+npm-shrinkwrap.json
+pnpm-lock.yaml
+*.lock
 
 # Logs
 logs

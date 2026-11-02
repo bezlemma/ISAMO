@@ -29,7 +29,8 @@ export async function protect({source = path.join(root,'.output/public'), output
     count++;
     return id;
   }
-  const template = async file => (await readFile(path.join(root,'hosting',file),'utf8')).replaceAll('__BUILD_VERSION__',version);
+  const favicon = 'data:image/png;base64,' + (await readFile(path.join(root,'public/favicon.png'))).toString('base64');
+  const template = async file => (await readFile(path.join(root,'hosting',file),'utf8')).replaceAll('__BUILD_VERSION__',version).replaceAll('__FAVICON__',favicon);
   const login = await template('login.html');
   for (const file of await readdir(source,{recursive:true,withFileTypes:true})) {
     if (!file.isFile()) continue;

@@ -10,9 +10,8 @@
         </div>
         <h2 class="text-2xl font-bold mb-3 text-neutral-900 group-hover:text-red-800 transition-colors">{{ resource.name }}</h2>
         <p class="text-neutral-600 mb-4">{{ resource.description }}</p>
-        <span class="text-red-800 font-semibold text-sm flex items-center">
+        <span class="text-red-800 font-semibold text-sm">
           {{ resource.category === 'Research facilities' ? 'Visit Facility' : 'Visit Resource' }}
-          <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
         </span>
       </a>
     </div>

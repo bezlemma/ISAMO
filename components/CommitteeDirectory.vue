@@ -10,7 +10,7 @@
       <ul role="list" class="grid gap-x-8 gap-y-12 sm:grid-cols-2 sm:gap-y-16 xl:col-span-2">
         <li v-for="person in team" :key="person.name">
           <div class="flex items-center gap-x-6">
-            <img v-if="person.avatar" :src="baseURL + person.avatar" :alt="person.name" class="h-32 w-32 rounded-full object-cover border border-slate-100" />
+            <img v-if="person.avatar" :src="baseURL + person.avatar" :alt="person.name" width="128" height="128" class="h-32 w-32 shrink-0 rounded-full object-cover border border-slate-100" />
             <div v-else class="h-32 w-32 rounded-full bg-slate-100 flex items-center justify-center text-3xl font-bold text-slate-500 border border-slate-100">
               {{ (person.name || '?').charAt(0) }}
             </div>

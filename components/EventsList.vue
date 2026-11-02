@@ -7,7 +7,7 @@
 
     <div class="grid gap-8 md:grid-cols-3 mb-16">
       <section v-for="series in seriesList" :id="series.id" :key="series.id" class="bg-white border border-slate-200 rounded-2xl p-8 scroll-mt-24">
-        <h2 class="text-2xl font-bold mb-4">{{ series.name }}</h2><p class="text-neutral-600 leading-7 mb-6">{{ series.description }}</p><a :href="series.url" target="_blank" rel="noopener noreferrer" class="text-red-800 font-semibold underline">{{ series.linkLabel }} ↗</a>
+        <h2 class="text-2xl font-bold mb-4">{{ series.name }}</h2><p class="text-neutral-600 leading-7 mb-6">{{ series.description }}</p><a :href="series.url" target="_blank" rel="noopener noreferrer" class="text-red-800 font-semibold underline">{{ series.linkLabel }}</a>
       </section>
     </div>
     <div class="flex flex-wrap items-center justify-between gap-4 mb-8"><h2 class="text-2xl font-bold">Community event announcements</h2><div><label for="event-filter" class="sr-only">Filter events</label><select id="event-filter" v-model="selectedSeries" class="border border-neutral-200 bg-white rounded-lg px-4 py-3"><option value="">All events</option><option v-for="series in seriesList" :key="series.id" :value="series.id">{{ series.name }}</option><option value="other">Other events</option></select></div></div>
@@ -55,7 +55,7 @@
           <p class="text-neutral-600 whitespace-pre-wrap mb-4">{{ event.body }}</p>
 
           <a v-if="event.link" :href="event.link" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-sm font-semibold text-red-800 hover:text-red-700">
-            Learn more <span aria-hidden="true" class="ml-1">&rarr;</span>
+            Learn more
           </a>
         </div>
       </div>
