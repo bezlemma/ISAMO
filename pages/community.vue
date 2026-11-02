@@ -11,10 +11,10 @@
         </div>
         <button v-if="!composing" @click="startPost" class="primary">Write a Post</button>
       </template>
-      <NuxtLink v-else to="/membership" class="text-red-800 font-semibold underline">Sign in to your ISAMO account to post or reply</NuxtLink>
+      <NuxtLink v-else :to="eventRequest ? '/membership?next=event' : '/membership'" class="text-red-800 font-semibold underline">{{ eventRequest ? 'Sign in to share an event' : 'Sign in to your ISAMO account to post or reply' }}</NuxtLink>
     </div>
     <form v-if="ready && composing && member" @submit.prevent="save" class="bg-white border border-neutral-200 rounded-2xl p-6 sm:p-8 space-y-4 mb-8">
-      <h2 class="text-2xl font-bold">{{ editing ? 'Edit Post' : 'Write a Post' }}</h2>
+      <h2 class="text-2xl font-bold">{{ draft.kind === 'event' ? (editing ? 'Edit Event' : 'Share an Event') : (editing ? 'Edit Post' : 'Write a Post') }}</h2>
       <p class="text-neutral-600">{{ editing ? 'Editing as' : 'Posting as' }} <strong>{{ member.name }}</strong>.</p>
       <div><label for="post-title" class="block font-medium mb-2">Title</label><input id="post-title" v-model="draft.title" required maxlength="200" class="field" /></div>
       <div><label for="post-body" class="block font-medium mb-2">Message</label><textarea id="post-body" v-model="draft.body" required rows="6" maxlength="10000" class="field" /></div>
@@ -23,7 +23,7 @@
       <div v-if="draft.kind === 'event'"><label for="event-series" class="block font-medium mb-2">Event Series</label><select id="event-series" v-model="draft.event_series" class="field"><option value="ams">AMS meeting</option><option value="egged">EGGED</option><option value="seminar">Avian Seminar Series</option><option value="other">Other event</option></select></div>
       <div><label for="post-link" class="block font-medium mb-2">Website Link (optional)</label><input id="post-link" v-model="draft.link" type="url" maxlength="2000" placeholder="https://" class="field" /></div>
       <p v-if="saveError" role="alert" class="text-red-800">{{ saveError }}</p>
-      <div class="flex gap-4"><button :disabled="saving" class="primary">{{ saving ? 'Saving…' : editing ? 'Save Changes' : 'Publish Post' }}</button><button type="button" @click="composing = false" class="px-4 py-3 text-neutral-600">Cancel</button></div>
+      <div class="flex gap-4"><button :disabled="saving" class="primary">{{ saving ? 'Saving…' : editing ? 'Save Changes' : draft.kind === 'event' ? 'Publish Event' : 'Publish Post' }}</button><button type="button" @click="composing = false" class="px-4 py-3 text-neutral-600">Cancel</button></div>
     </form>
     <p v-if="loading" role="status" class="text-neutral-600 py-8">Loading posts…</p>
     <div v-if="error" role="alert" class="bg-white border border-neutral-200 rounded-xl p-6 mb-6"><p>{{ error }}</p><button @click="load()" class="text-red-800 font-semibold underline mt-3">Try again</button></div>
@@ -51,6 +51,8 @@
 </template>
 <script setup>
 const { member, ready, api, signOut } = useCommunity();
+const route = useRoute();
+const eventRequest = computed(() => route.query.compose === 'event');
 const signingOut = ref(false);
 const posts = ref([]), loading = ref(true), error = ref(''), next = ref(null);
 const composing = ref(false), editing = ref(''), saving = ref(false), saveError = ref(''), removed = ref('');
@@ -60,6 +62,12 @@ const openReplies = ref(''), replies = ref([]), replyText = ref(''), replyBusy =
 const formatDate = value => new Date(value).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
 async function load(more = false) { loading.value = true; error.value = ''; try { const result = await api('/posts' + (more && next.value ? '?before=' + encodeURIComponent(next.value) : '')); posts.value = more ? [...posts.value, ...result.posts] : result.posts; next.value = result.next; } catch (e) { error.value = e.message; } finally { loading.value = false; } }
 function startPost() { editing.value = ''; draft.value = empty(); saveError.value = ''; composing.value = true; }
+watch([ready, () => member.value?.id, () => route.query.compose], () => {
+  if (ready.value && member.value && eventRequest.value && !composing.value) {
+    startPost(); draft.value.kind = 'event';
+    draft.value.event_series = ['ams', 'egged', 'seminar'].includes(route.query.series) ? route.query.series : 'other';
+  }
+}, { immediate: true });
 async function logOut() {
   signingOut.value = true;
   try { await signOut(); } catch { error.value = 'You have been signed out on this device. The server could not be reached.'; }

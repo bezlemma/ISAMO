@@ -36,3 +36,8 @@ CREATE TABLE IF NOT EXISTS membership_payments (session_id TEXT PRIMARY KEY REFE
 CREATE INDEX IF NOT EXISTS payments_member ON membership_payments(member_id,revoked,valid_until);
 CREATE INDEX IF NOT EXISTS payments_intent ON membership_payments(payment_intent);
 CREATE TABLE IF NOT EXISTS payment_events (id TEXT PRIMARY KEY, created INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS site_pages (
+  slug TEXT PRIMARY KEY, content TEXT NOT NULL,
+  revision INTEGER NOT NULL DEFAULT 1, updated TEXT NOT NULL,
+  updated_by TEXT NOT NULL REFERENCES members(id)
+);

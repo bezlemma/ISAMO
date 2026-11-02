@@ -2,9 +2,9 @@
   <section id="trustees" class="bg-white py-12 scroll-mt-24">
     <div class="mx-auto grid max-w-7xl gap-x-8 gap-y-20 px-6 lg:px-8 xl:grid-cols-3">
       <div class="max-w-2xl">
-        <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Trustees</h2>
+        <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">{{ title }}</h2>
         <p class="mt-6 text-lg leading-8 text-slate-600">
-          Our trustees oversee the society’s activities, membership and finances.
+          {{ introduction }}
         </p>
       </div>
       <ul role="list" class="grid gap-x-8 gap-y-12 sm:grid-cols-2 sm:gap-y-16 xl:col-span-2">
@@ -35,6 +35,6 @@
 </template>
 
 <script setup>
-import team from '~/data/committee.json';
+defineProps({ team: { type: Array, required: true }, title: { type: String, required: true }, introduction: { type: String, required: true } });
 const { baseURL } = useRuntimeConfig().app;
 </script>

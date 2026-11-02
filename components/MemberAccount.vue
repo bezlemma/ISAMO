@@ -11,7 +11,7 @@
         <code class="block break-all select-all bg-white p-3 rounded-lg text-sm">{{ recovery }}</code>
         <button @click="recovery = ''" class="mt-4 text-red-800 font-semibold underline">I’ve saved it</button>
       </div>
-      <NuxtLink to="/community" class="inline-block px-6 py-3 bg-red-800 text-white rounded-full font-semibold mb-8">Visit the community</NuxtLink>
+      <NuxtLink :to="route.query.next === 'event' ? '/community?compose=event' : '/community'" class="inline-block px-6 py-3 bg-red-800 text-white rounded-full font-semibold mb-8">{{ route.query.next === 'event' ? 'Share an event' : 'Visit the community' }}</NuxtLink>
       <p v-if="notice" role="status" class="mb-6 text-neutral-700">{{ notice }}</p>
       <div v-if="!member.email_verified && settings.email_enabled" class="bg-neutral-50 rounded-xl p-5 mb-8">
         <p>Confirm your email address to receive mailing-list updates.</p>
@@ -26,7 +26,7 @@
         <MemberDetailsFields v-model="profile" prefix="profile" />
         <button :disabled="busy" class="primary">{{ busy ? 'Saving…' : 'Save Changes' }}</button>
       </form>
-      <div v-else class="text-neutral-600 space-y-2"><p class="font-bold text-lg text-neutral-900">{{ member.name }}</p><p>{{ member.email }}</p><p>{{ member.institution }}</p><p>{{ member.role }}</p><p class="whitespace-pre-wrap">{{ member.research }}</p><p>News and events: {{ member.mailing_list ? 'Subscribed' : 'Opted out' }}</p></div>
+      <div v-else class="text-neutral-600 space-y-2"><p class="font-bold text-lg text-neutral-900">{{ member.name }}</p><p>{{ member.email }}</p><p>{{ member.institution }}</p><p>{{ member.role }}</p><p>News and events: {{ member.mailing_list ? 'Subscribed' : 'Opted out' }}</p></div>
       <section class="mt-8 pt-6 border-t border-neutral-200" aria-labelledby="membership-payment-heading">
         <h2 id="membership-payment-heading" class="text-lg font-bold mb-3">Membership</h2>
         <p v-if="paidUntil" class="text-neutral-700 mb-3">Membership paid through {{ new Date(paidUntil).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }) }}.</p>
@@ -50,7 +50,7 @@
         <div><label for="member-email" class="block text-sm font-medium text-neutral-600 mb-1">Email</label><input id="member-email" v-model="email" type="email" required maxlength="254" autocomplete="username" class="field" /></div>
         <MemberDetailsFields v-if="mode === 'register'" v-model="profile" prefix="signup" />
         <div v-if="mode === 'recover'"><label for="recovery-code" class="block text-sm font-medium text-neutral-600 mb-1">Recovery Code</label><input id="recovery-code" v-model="recoveryInput" required autocomplete="off" class="field" /></div>
-        <div><label for="member-password" class="block text-sm font-medium text-neutral-600 mb-1">{{ mode === 'recover' ? 'New Password' : 'Password' }}</label><input id="member-password" v-model="password" type="password" required :minlength="mode === 'login' ? 1 : 12" maxlength="128" :autocomplete="mode === 'login' ? 'current-password' : 'new-password'" class="field" /><p v-if="mode !== 'login'" class="text-sm text-neutral-500 mt-1">At least 12 characters.</p></div>
+        <div><label for="member-password" class="block text-sm font-medium text-neutral-600 mb-1">{{ mode === 'recover' ? 'New Password' : 'Password' }}</label><input id="member-password" v-model="password" type="password" required :minlength="mode === 'login' ? 1 : 12" maxlength="128" :autocomplete="mode === 'login' ? 'current-password' : 'new-password'" class="field" /></div>
         <div v-if="mode !== 'login'"><label for="password-confirm" class="block text-sm font-medium text-neutral-600 mb-1">Confirm Password</label><input id="password-confirm" v-model="confirmation" type="password" required autocomplete="new-password" class="field" /></div>
         <p v-if="error" role="alert" class="text-red-800 text-sm">{{ error }}</p>
         <button :disabled="busy" type="submit" class="primary w-full">{{ busy ? 'Please wait…' : mode === 'register' ? 'Create Account' : mode === 'recover' ? 'Reset Password' : 'Sign In' }}</button>
@@ -64,12 +64,13 @@
 </template>
 <script setup>
 const { member, api, remember, signOut } = useCommunity();
+const route = useRoute();
 const mode = ref('login'), name = ref(''), email = ref(''), password = ref(''), confirmation = ref('');
 const recoveryInput = ref(''), recovery = ref(''), busy = ref(false), error = ref(''), notice = ref('');
 const edit = ref(false), editName = ref('');
-const profile = ref({ institution: '', role: '', research: '', mailing_list: true });
+const profile = ref({ institution: '', role: '', mailing_list: true });
 const settings = ref({ payments_enabled: false, email_enabled: false, plans: [] }), paidUntil = ref(null);
-function toggleEdit() { edit.value = !edit.value; editName.value = member.value.name; profile.value = { institution: member.value.institution, role: member.value.role, research: member.value.research, mailing_list: member.value.mailing_list }; }
+function toggleEdit() { edit.value = !edit.value; editName.value = member.value.name; profile.value = { institution: member.value.institution, role: member.value.role, mailing_list: member.value.mailing_list }; }
 function changeMode(next) { mode.value = next; error.value = ''; password.value = ''; confirmation.value = ''; }
 async function submit() {
   busy.value = true; error.value = '';
@@ -78,6 +79,7 @@ async function submit() {
     const result = await api('/auth/' + mode.value, { method: 'POST', body: { name: name.value, email: email.value, password: password.value, recovery: recoveryInput.value, ...profile.value } });
     remember(result); recovery.value = result.recovery || ''; password.value = ''; confirmation.value = ''; recoveryInput.value = '';
     notice.value = result.email_status === 'queued' ? 'Your account is ready. A confirmation email is on its way.' : '';
+    if (route.query.next === 'event' && mode.value === 'login') await navigateTo('/community?compose=event');
   } catch (e) { error.value = e.message; } finally { busy.value = false; }
 }
 async function saveProfile() {

@@ -39,7 +39,7 @@ export async function startLocalCommunity(port = 8787) {
       const chunks = []; let size = 0;
       for await (const chunk of incoming) {
         size += chunk.length;
-        if (size > 64000) { outgoing.writeHead(413); outgoing.end('Request too large'); return; }
+        if (size > 250000) { outgoing.writeHead(413); outgoing.end('Request too large'); return; }
         chunks.push(chunk);
       }
       const method = incoming.method || 'GET';

@@ -2,6 +2,7 @@
 import { encoder, hex, token, hash, json, HttpError, fail, rawBody } from './common.mjs';
 import { paymentConfig, checkout, paymentWebhook } from './payments.mjs';
 import { emailConfigured, queueConfirmation, deliverMail, confirmEmail, unsubscribe } from './email.mjs';
+import { pageDefaults, validatePage } from '../shared/site-pages.mjs';
 
 async function equal(a, b) {
   const key = await crypto.subtle.importKey('raw', encoder.encode('ISAMO constant-time comparison'), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign', 'verify']);
@@ -36,15 +37,15 @@ function postFields(data) {
   if (kind === 'event' && !['ams', 'egged', 'seminar', 'other'].includes(series)) fail(400, 'Choose an event series.');
   return [title, body, kind, eventDate, link, series];
 }
-async function readBody(request) {
+async function readBody(request, limit) {
   if (!request.headers.get('content-type')?.includes('application/json')) fail(415, 'Send JSON.');
-  const raw = await rawBody(request);
+  const raw = await rawBody(request, limit);
   try { const data = JSON.parse(raw); if (!data || typeof data !== 'object' || Array.isArray(data)) fail(400, 'Invalid message.'); return data; } catch { fail(400, 'Invalid message.'); }
 }
 const publicMember = member => ({ id: member.id, name: member.name, email: member.email, institution: member.institution, role: member.role || '', research: member.research || '', mailing_list: !!member.mailing_list, email_verified: !!member.email_verified, is_admin: !!member.is_admin, created: member.created });
-function profile(data) {
+function profile(data, previous = {}) {
   if (typeof data.mailing_list !== 'boolean') fail(400, 'Choose your mailing preference.');
-  return { name: field(data.name, 'Name', 1, 100), institution: field(data.institution, 'Institution', 1, 200), role: field(data.role, 'Role', 1, 100), research: field(data.research, 'Research description', 1, 2000), mailing_list: Number(data.mailing_list) };
+  return { name: field(data.name, 'Name', 1, 100), institution: field(data.institution, 'Institution', 1, 200), role: field(data.role, 'Role', 1, 100), research: field(data.research ?? previous.research ?? '', 'Research description', 0, 2000), mailing_list: Number(data.mailing_list) };
 }
 async function rate(env, key, max, seconds) {
   const now = Math.floor(Date.now() / 1000), bucket = Math.floor(now / seconds);
@@ -74,6 +75,29 @@ async function handle(request, env, ctx) {
     const ip = await hash((request.headers.get('cf-connecting-ip') || 'local') + env.AUTH_PEPPER);
     await rate(env, 'write:' + ip, 100, 3600);
     if (path.startsWith('/auth/')) await rate(env, 'auth:' + ip, 15, 900);
+  }
+  const pageMatch = path.match(/^\/pages\/([a-z-]+)$/);
+  if (pageMatch) {
+    const slug = pageMatch[1];
+    if (!Object.hasOwn(pageDefaults, slug)) fail(404, 'Page not found.');
+    if (method === 'GET') {
+      const saved = await env.DB.prepare('SELECT content,revision FROM site_pages WHERE slug=?').bind(slug).first();
+      return json({ content: saved ? JSON.parse(saved.content) : pageDefaults[slug], revision: saved?.revision || 0 });
+    }
+    if (method === 'PATCH') {
+      const member = await signedIn(request, env);
+      if (!member.is_admin) fail(403, 'Administrator access is required.');
+      const data = await readBody(request, 250000);
+      if (!Number.isSafeInteger(data.revision) || data.revision < 0) fail(400, 'Reload this page before editing.');
+      let content;
+      try { content = validatePage(slug, data.content); } catch (error) { fail(400, error.message); }
+      const values = [JSON.stringify(content), new Date().toISOString(), member.id, slug];
+      const saved = data.revision === 0
+        ? await env.DB.prepare('INSERT INTO site_pages(content,updated,updated_by,slug) VALUES(?,?,?,?) ON CONFLICT(slug) DO NOTHING RETURNING revision').bind(...values).first()
+        : await env.DB.prepare('UPDATE site_pages SET content=?,updated=?,updated_by=?,revision=revision+1 WHERE slug=? AND revision=? RETURNING revision').bind(...values, data.revision).first();
+      if (!saved) fail(409, 'Another administrator changed this page. Cancel to load the latest version, then edit again.');
+      return json({ content, revision: saved.revision });
+    }
   }
   if (method === 'POST' && ['/auth/register', '/auth/login', '/auth/recover'].includes(path)) {
     const data = await readBody(request), address = email(data.email);
@@ -109,7 +133,7 @@ async function handle(request, env, ctx) {
     const member = await signedIn(request, env);
     if (method === 'GET') return json(publicMember(member));
     if (method === 'PATCH') {
-      const values = profile(await readBody(request));
+      const values = profile(await readBody(request), member);
       await env.DB.prepare('UPDATE members SET name=?,institution=?,role=?,research=?,mailing_list=?,mailing_updated=? WHERE id=?').bind(values.name, values.institution, values.role, values.research, values.mailing_list, new Date().toISOString(), member.id).run();
       return json(publicMember({ ...member, ...values }));
     }
