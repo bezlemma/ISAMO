@@ -71,7 +71,7 @@ test('every published route and asset is protected, including direct deep links'
   const manifest=JSON.parse((await unpack(config.manifest)).toString());
   for(const name of ['/','/resources/','/_nuxt/app.js','/portrait.png']) assert.ok(manifest.files[name],name);
   assert.match((await unpack(manifest.files['/resources/'].id)).toString(),/PRIVATE-CONTENT-TEST/);
-  for(const name of ['index.html','404.html','resources/index.html'])assert.match(await readFile(path.join(output,name),'utf8'),/Welcome to the demo/);
+  for(const name of ['index.html','404.html','resources/index.html'])assert.match(await readFile(path.join(output,name),'utf8'),/<form id="unlock">/);
   for(const file of await readdir(output,{recursive:true,withFileTypes:true})){
     if(!file.isFile())continue;
     const bytes=await readFile(path.join(file.parentPath,file.name));
