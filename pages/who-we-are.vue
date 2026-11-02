@@ -1,15 +1,18 @@
 <template>
   <div class="pt-24 pb-16">
-    <div class="max-w-7xl mx-auto px-6 lg:px-8"><h1 class="text-4xl md:text-5xl font-bold text-slate-900 mb-10">Who are we?</h1><nav aria-label="People and contact" class="flex flex-wrap gap-6 text-red-800 font-semibold mb-4"><a href="#trustees">Trustees</a><a href="#advisory-board">Scientific Advisory Board</a><a href="#contact">Contact us</a></nav></div>
-    <CommitteeDirectory />
+    <div class="max-w-7xl mx-auto px-6 lg:px-8"><h1 class="text-4xl md:text-5xl font-bold text-slate-900 mb-10">{{ content.title }}</h1><PageEditor page-id="who-we-are" /><nav aria-label="People and contact" class="flex flex-wrap gap-6 text-red-800 font-semibold mb-4"><a href="#trustees">{{ content.trusteesTitle }}</a><a href="#advisory-board">{{ content.boardTitle }}</a><a href="#contact">{{ content.contactTitle }}</a></nav></div>
+    <CommitteeDirectory :team="content.trustees" :title="content.trusteesTitle" :introduction="content.trusteesDescription" />
     <div class="max-w-7xl mx-auto px-6 lg:px-8">
       <section id="advisory-board" class="py-12 border-b border-neutral-200 scroll-mt-24">
-        <h2 class="text-3xl font-bold mb-6">Scientific Advisory Board</h2>
-        <p class="text-neutral-600 mb-6">The board advises the trustees on the society’s scientific activities.</p>
-        <h3 class="font-semibold text-lg">Susanne Dietrich</h3><p class="text-neutral-600">University of Portsmouth</p>
+        <h2 class="text-3xl font-bold mb-6">{{ content.boardTitle }}</h2>
+        <p class="text-neutral-600 mb-6 whitespace-pre-line">{{ content.boardDescription }}</p>
+        <div v-for="person in content.board" :key="person.name" class="mb-5"><h3 class="font-semibold text-lg">{{ person.name }}</h3><p class="text-neutral-600">{{ person.institution }}</p></div>
       </section>
-      <section id="contact" class="pt-12 scroll-mt-24"><h2 class="text-3xl font-bold mb-5">Contact us</h2><p class="text-neutral-600 mb-4">For membership, events and society enquiries, email:</p><a href="mailto:admin@avianmodel.org" class="text-lg text-red-800 font-semibold underline">admin@avianmodel.org</a></section>
+      <section id="contact" class="pt-12 scroll-mt-24"><h2 class="text-3xl font-bold mb-5">{{ content.contactTitle }}</h2><p class="text-neutral-600 mb-4 whitespace-pre-line">{{ content.contactDescription }}</p><a :href="'mailto:' + content.email" class="text-lg text-red-800 font-semibold underline">{{ content.email }}</a></section>
     </div>
   </div>
 </template>
-<script setup>useHead({ title: 'Who are we? | ISAMO' });</script>
+<script setup>
+const { content } = useSitePage('who-we-are');
+useHead(() => ({ title: content.value.title + ' | ISAMO' }));
+</script>

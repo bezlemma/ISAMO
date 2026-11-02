@@ -1,16 +1,23 @@
 <template>
   <div class="pt-24 pb-12 px-4 max-w-7xl mx-auto">
     <div class="text-center mb-16">
-      <h1 class="text-4xl md:text-5xl font-bold mb-4 text-slate-900">Events</h1>
+      <h1 class="text-4xl md:text-5xl font-bold mb-4 text-slate-900">{{ content.title }}</h1>
 
     </div>
 
+    <PageEditor page-id="events" />
     <div class="grid gap-8 md:grid-cols-3 mb-16">
       <section v-for="series in seriesList" :id="series.id" :key="series.id" class="bg-white border border-slate-200 rounded-2xl p-8 scroll-mt-24">
         <h2 class="text-2xl font-bold mb-4">{{ series.name }}</h2><p class="text-neutral-600 leading-7 mb-6">{{ series.description }}</p><a :href="series.url" target="_blank" rel="noopener noreferrer" class="text-red-800 font-semibold underline">{{ series.linkLabel }}</a>
       </section>
     </div>
-    <div class="flex flex-wrap items-center justify-between gap-4 mb-8"><h2 class="text-2xl font-bold">Community event announcements</h2><div><label for="event-filter" class="sr-only">Filter events</label><select id="event-filter" v-model="selectedSeries" class="border border-neutral-200 bg-white rounded-lg px-4 py-3"><option value="">All events</option><option v-for="series in seriesList" :key="series.id" :value="series.id">{{ series.name }}</option><option value="other">Other events</option></select></div></div>
+    <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+      <h2 class="text-2xl font-bold">Community event announcements</h2>
+      <div class="flex flex-wrap items-center gap-5">
+        <label for="event-filter" class="sr-only">Filter events</label><select id="event-filter" v-model="selectedSeries" class="border border-neutral-200 bg-white rounded-lg px-4 py-3"><option value="">All events</option><option v-for="series in seriesList" :key="series.id" :value="series.id">{{ series.name }}</option><option value="other">Other events</option></select>
+        <NuxtLink :to="{ path: '/community', query: { compose: 'event', series: selectedSeries || 'other' } }" class="text-red-800 font-semibold underline">Share an event</NuxtLink>
+      </div>
+    </div>
     <!-- Loading State -->
     <div v-if="pending" class="flex justify-center py-20">
       <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
@@ -25,7 +32,6 @@
     <!-- Empty State -->
     <div v-else-if="!filteredEvents.length" class="text-center py-12 border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50">
       <p class="text-slate-600 text-lg">No upcoming community announcements{{ selectedSeries ? ' in this series' : '' }}.</p>
-      <NuxtLink to="/community" class="inline-block text-red-800 font-semibold underline mt-3">Share an event</NuxtLink>
     </div>
 
     <!-- Events Grid -->
@@ -64,7 +70,9 @@
 </template>
 
 <script setup>
-import seriesList from '~/data/event-series.json';
+const { content } = useSitePage('events');
+const seriesList = computed(() => content.value.series);
+useHead(() => ({ title: content.value.title + ' | ISAMO' }));
 const { api } = useCommunity();
 const events = ref([]), pending = ref(true), error = ref('');
 const selectedSeries = ref('');
