@@ -29,6 +29,7 @@
       <div v-else class="text-neutral-600 space-y-2"><p class="font-bold text-lg text-neutral-900">{{ member.name }}</p><p>{{ member.email }}</p><p>{{ member.institution }}</p><p>{{ member.role }}</p><p>News and events: {{ member.mailing_list ? 'Subscribed' : 'Opted out' }}</p></div>
       <section class="mt-8 pt-6 border-t border-neutral-200" aria-labelledby="membership-payment-heading">
         <h2 id="membership-payment-heading" class="text-lg font-bold mb-3">Membership</h2>
+        <p class="text-neutral-700 mb-3">{{ membershipPurpose }}</p>
         <p v-if="paidUntil" class="text-neutral-700 mb-3">Membership paid through {{ new Date(paidUntil).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }) }}.</p>
         <p v-if="!settings.payments_enabled" class="text-neutral-600">Membership payments are not open yet.</p>
         <template v-else><p class="text-neutral-600 mb-3">Choose your membership category. You will see the fee before paying.</p><div class="flex flex-wrap gap-3"><button v-for="plan in settings.plans" :key="plan.id" @click="pay(plan.id)" :disabled="busy" class="primary">{{ plan.label }}</button></div></template>
@@ -44,6 +45,7 @@
       <div class="text-center mb-8">
         <h1 class="text-3xl font-bold mb-2 text-neutral-900">{{ mode === 'register' ? 'Create Account' : mode === 'recover' ? 'Reset Password' : 'Member Login' }}</h1>
         <p class="text-neutral-600">{{ mode === 'register' ? 'Join the ISAMO community.' : mode === 'recover' ? 'Enter the recovery code saved when you created your account.' : 'Sign in to post and reply.' }}</p>
+        <p v-if="mode !== 'recover'" class="text-neutral-600 mt-4">{{ membershipPurpose }}</p>
       </div>
       <form @submit.prevent="submit" class="space-y-4 bg-white p-8 rounded-2xl border border-neutral-200 shadow-sm">
         <div v-if="mode === 'register'"><label for="member-name" class="block text-sm font-medium text-neutral-600 mb-1">Full Name</label><input id="member-name" v-model="name" required maxlength="100" autocomplete="name" class="field" /></div>
@@ -65,6 +67,7 @@
 <script setup>
 const { member, api, remember, signOut } = useCommunity();
 const route = useRoute();
+const membershipPurpose = 'Funds raised through membership fees will support conference and workshop travel and attendance for individuals from unfunded environments.';
 const mode = ref('login'), name = ref(''), email = ref(''), password = ref(''), confirmation = ref('');
 const recoveryInput = ref(''), recovery = ref(''), busy = ref(false), error = ref(''), notice = ref('');
 const edit = ref(false), editName = ref('');
