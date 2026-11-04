@@ -31,11 +31,13 @@
         <h2 id="membership-payment-heading" class="text-lg font-bold mb-3">Membership</h2>
         <p class="text-neutral-700 mb-3">{{ membershipPurpose }}</p>
         <p v-if="paidUntil" class="text-neutral-700 mb-3">Membership paid through {{ new Date(paidUntil).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }) }}.</p>
+        <p v-if="waivedUntil && (!paidUntil || waivedUntil > paidUntil)" class="text-neutral-700 mb-3">Membership fees waived through {{ new Date(waivedUntil).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' }) }}.</p>
         <p v-if="!settings.payments_enabled" class="text-neutral-600">Membership payments are not open yet.</p>
         <template v-else><p class="text-neutral-600 mb-3">Choose your membership category. You will see the fee before paying.</p><div class="flex flex-wrap gap-3"><button v-for="plan in settings.plans" :key="plan.id" @click="pay(plan.id)" :disabled="busy" class="primary">{{ plan.label }}</button></div></template>
       </section>
       <section v-if="member.is_admin" class="mt-8 pt-6 border-t border-neutral-200">
-        <h2 class="text-lg font-bold mb-3">Mailing list</h2>
+        <h2 class="text-lg font-bold mb-3">Administration</h2>
+        <NuxtLink to="/admin/members" class="primary inline-block mb-5">Manage members</NuxtLink>
         <p class="text-neutral-600 mb-3">Download members who have confirmed their email and chosen to receive updates.</p>
         <button @click="downloadMailingList" :disabled="busy" class="text-red-800 font-semibold underline">Download mailing list</button>
       </section>
@@ -43,21 +45,23 @@
     </div>
     <div v-else :class="mode === 'register' ? 'max-w-xl mx-auto' : 'max-w-md mx-auto'">
       <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold mb-2 text-neutral-900">{{ mode === 'register' ? 'Create Account' : mode === 'recover' ? 'Reset Password' : 'Member Login' }}</h1>
-        <p class="text-neutral-600">{{ mode === 'register' ? 'Join the ISAMO community.' : mode === 'recover' ? 'Enter the recovery code saved when you created your account.' : 'Sign in to post and reply.' }}</p>
-        <p v-if="mode !== 'recover'" class="text-neutral-600 mt-4">{{ membershipPurpose }}</p>
+        <h1 class="text-3xl font-bold mb-2 text-neutral-900">{{ mode === 'register' ? 'Create Account' : ['recover','request-reset'].includes(mode) ? 'Reset Password' : 'Member Login' }}</h1>
+        <p class="text-neutral-600">{{ mode === 'register' ? 'Join the ISAMO community.' : mode === 'recover' ? 'Enter the recovery code saved when you created your account.' : mode === 'request-reset' ? 'Enter your account email to receive a password reset link.' : 'Sign in to post and reply.' }}</p>
+        <p v-if="['login','register'].includes(mode)" class="text-neutral-600 mt-4">{{ membershipPurpose }}</p>
       </div>
       <form @submit.prevent="submit" class="space-y-4 bg-white p-8 rounded-2xl border border-neutral-200 shadow-sm">
         <div v-if="mode === 'register'"><label for="member-name" class="block text-sm font-medium text-neutral-600 mb-1">Full Name</label><input id="member-name" v-model="name" required maxlength="100" autocomplete="name" class="field" /></div>
         <div><label for="member-email" class="block text-sm font-medium text-neutral-600 mb-1">Email</label><input id="member-email" v-model="email" type="email" required maxlength="254" autocomplete="username" class="field" /></div>
         <MemberDetailsFields v-if="mode === 'register'" v-model="profile" prefix="signup" />
         <div v-if="mode === 'recover'"><label for="recovery-code" class="block text-sm font-medium text-neutral-600 mb-1">Recovery Code</label><input id="recovery-code" v-model="recoveryInput" required autocomplete="off" class="field" /></div>
-        <div><label for="member-password" class="block text-sm font-medium text-neutral-600 mb-1">{{ mode === 'recover' ? 'New Password' : 'Password' }}</label><input id="member-password" v-model="password" type="password" required :minlength="mode === 'login' ? 1 : 12" maxlength="128" :autocomplete="mode === 'login' ? 'current-password' : 'new-password'" class="field" /></div>
-        <div v-if="mode !== 'login'"><label for="password-confirm" class="block text-sm font-medium text-neutral-600 mb-1">Confirm Password</label><input id="password-confirm" v-model="confirmation" type="password" required autocomplete="new-password" class="field" /></div>
+        <div v-if="mode !== 'request-reset'"><label for="member-password" class="block text-sm font-medium text-neutral-600 mb-1">{{ mode === 'recover' ? 'New Password' : 'Password' }}</label><input id="member-password" v-model="password" type="password" required :minlength="mode === 'login' ? 1 : 12" maxlength="128" :autocomplete="mode === 'login' ? 'current-password' : 'new-password'" class="field" /></div>
+        <div v-if="['register','recover'].includes(mode)"><label for="password-confirm" class="block text-sm font-medium text-neutral-600 mb-1">Confirm Password</label><input id="password-confirm" v-model="confirmation" type="password" required autocomplete="new-password" class="field" /></div>
         <p v-if="error" role="alert" class="text-red-800 text-sm">{{ error }}</p>
-        <button :disabled="busy" type="submit" class="primary w-full">{{ busy ? 'Please wait…' : mode === 'register' ? 'Create Account' : mode === 'recover' ? 'Reset Password' : 'Sign In' }}</button>
+        <p v-if="notice" role="status">{{ notice }}</p>
+        <button :disabled="busy" type="submit" class="primary w-full">{{ busy ? 'Please wait…' : mode === 'register' ? 'Create Account' : mode === 'request-reset' ? 'Email reset link' : mode === 'recover' ? 'Reset Password' : 'Sign In' }}</button>
         <div class="text-center text-sm space-y-3">
-          <button v-if="mode === 'login'" type="button" @click="changeMode('recover')" class="block w-full text-neutral-600 hover:text-red-800">Forgot Password?</button>
+          <button v-if="mode === 'login'" type="button" @click="changeMode('request-reset')" class="block w-full text-neutral-600 hover:text-red-800">Forgot Password?</button>
+          <button v-if="mode === 'request-reset'" type="button" @click="changeMode('recover')" class="block w-full text-neutral-600 hover:text-red-800">Use a saved recovery code instead</button>
           <button type="button" @click="changeMode(mode === 'login' ? 'register' : 'login')" class="text-red-800 hover:underline font-medium">{{ mode === 'login' ? 'Need an account? Sign Up' : 'Back to Sign In' }}</button>
         </div>
       </form>
@@ -72,17 +76,19 @@ const mode = ref('login'), name = ref(''), email = ref(''), password = ref(''), 
 const recoveryInput = ref(''), recovery = ref(''), busy = ref(false), error = ref(''), notice = ref('');
 const edit = ref(false), editName = ref('');
 const profile = ref({ institution: '', role: '', mailing_list: true });
-const settings = ref({ payments_enabled: false, email_enabled: false, plans: [] }), paidUntil = ref(null);
+const settings = ref({ payments_enabled: false, email_enabled: false, plans: [] }), paidUntil = ref(null), waivedUntil = ref(null);
 function toggleEdit() { edit.value = !edit.value; editName.value = member.value.name; profile.value = { institution: member.value.institution, role: member.value.role, mailing_list: member.value.mailing_list }; }
-function changeMode(next) { mode.value = next; error.value = ''; password.value = ''; confirmation.value = ''; }
+function changeMode(next) { mode.value = next; error.value = ''; notice.value = ''; password.value = ''; confirmation.value = ''; }
 async function submit() {
   busy.value = true; error.value = '';
   try {
+    if (mode.value === 'request-reset') { await api('/auth/request-reset', { method: 'POST', body: { email: email.value } }); notice.value = 'If this email has an ISAMO account, a password reset link is on its way.'; return; }
     if (mode.value !== 'login' && password.value !== confirmation.value) throw new Error('Passwords do not match.');
     const result = await api('/auth/' + mode.value, { method: 'POST', body: { name: name.value, email: email.value, password: password.value, recovery: recoveryInput.value, ...profile.value } });
     remember(result); recovery.value = result.recovery || ''; password.value = ''; confirmation.value = ''; recoveryInput.value = '';
     notice.value = result.email_status === 'queued' ? 'Your account is ready. A confirmation email is on its way.' : '';
     if (route.query.next === 'event' && mode.value === 'login') await navigateTo('/community?compose=event');
+    if (route.query.next === 'admin' && result.member.is_admin) await navigateTo('/admin/members');
   } catch (e) { error.value = e.message; } finally { busy.value = false; }
 }
 async function saveProfile() {
@@ -104,8 +110,9 @@ async function downloadMailingList() {
     const a = document.createElement('a'); a.href = url; a.download = 'ISAMO-mailing-list.csv'; a.click(); URL.revokeObjectURL(url);
   } catch (e) { error.value = e.message; } finally { busy.value = false; }
 }
-watch(() => member.value?.id, async id => { paidUntil.value = null; if (id) { try { paidUntil.value = (await api('/membership/status')).paid_until; } catch (e) { error.value = e.message; } } });
-onMounted(async () => { try { settings.value = await api('/membership/config'); if (member.value) paidUntil.value = (await api('/membership/status')).paid_until; } catch (e) { error.value = e.message; } });
+async function loadDues() { const status = await api('/membership/status'); paidUntil.value = status.paid_until; waivedUntil.value = status.waived_until; }
+watch(() => member.value?.id, async id => { paidUntil.value = null; waivedUntil.value = null; if (id) { try { await loadDues(); } catch (e) { error.value = e.message; } } });
+onMounted(async () => { try { settings.value = await api('/membership/config'); if (member.value) await loadDues(); } catch (e) { error.value = e.message; } });
 </script>
 <style scoped>
 .field { @apply w-full bg-neutral-50 border border-neutral-200 rounded-lg px-4 py-3 text-neutral-900; }

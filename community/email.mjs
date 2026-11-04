@@ -36,11 +36,11 @@ export async function queueConfirmation(env, member) {
   const code = token(), id = crypto.randomUUID(), now = Date.now();
   const verify = `https://avianmodel.org/confirm-email#${code}`;
   const optOut = `https://isamo-community.darien0.workers.dev/unsubscribe?token=${await unsubscribeToken(env, member.id)}`;
-  const text = `Hello ${member.name},\n\nYour ISAMO community account has been created. Confirm your email address using this link within 48 hours:\n${verify}\n\n${member.mailing_list ? 'You are subscribed to ISAMO news and event updates. You can opt out at any time:\n' + optOut : 'You have opted out of ISAMO news and event updates.'}\n\nYou can edit your institution, role, research description and mailing preferences in your account:\nhttps://avianmodel.org/membership\n\nISAMO\nadmin@avianmodel.org`;
+  const text = `Hello ${member.name},\n\nYour ISAMO community account has been created. Confirm your email address using this link within 48 hours:\n${verify}\n\n${member.mailing_list ? 'You are subscribed to ISAMO news and event updates. You can opt out at any time:\n' + optOut : 'You have opted out of ISAMO news and event updates.'}\n\nYou can edit your institution, role and mailing preferences in your account:\nhttps://avianmodel.org/membership\n\nISAMO\nadmin@avianmodel.org`;
   await env.DB.batch([
     env.DB.prepare('DELETE FROM email_tokens WHERE member_id=?').bind(member.id),
     env.DB.prepare('INSERT INTO email_tokens(token_hash,member_id,expires) VALUES(?,?,?)').bind(await hash(code), member.id, now + 48 * 3600000),
-    env.DB.prepare('DELETE FROM email_outbox WHERE member_id=? AND sent_at IS NULL').bind(member.id),
+    env.DB.prepare("DELETE FROM email_outbox WHERE member_id=? AND sent_at IS NULL AND purpose='confirmation'").bind(member.id),
     env.DB.prepare('INSERT INTO email_outbox(id,member_id,recipient,body,created,next_attempt) VALUES(?,?,?,?,?,?)').bind(id, member.id, member.email, text, now, now)
   ]);
   return 'queued';
@@ -55,16 +55,26 @@ export async function confirmEmail(env, code) {
   ]);
   return json({ ok: true });
 }
+export async function queuePasswordReset(env, member) {
+  const code = token(), now = Date.now();
+  const text = `Hello ${member.name},\n\nUse this link to set a new password for your ISAMO account. It expires in one hour:\nhttps://avianmodel.org/reset-password#${code}\n\nIf you did not request this, you can ignore this email. Your password has not changed.\n\nISAMO\nadmin@avianmodel.org`;
+  await env.DB.batch([
+    env.DB.prepare('DELETE FROM password_reset_tokens WHERE member_id=?').bind(member.id),
+    env.DB.prepare('INSERT INTO password_reset_tokens VALUES(?,?,?)').bind(await hash(code), member.id, now + 3600000),
+    env.DB.prepare("DELETE FROM email_outbox WHERE member_id=? AND sent_at IS NULL AND purpose='reset'").bind(member.id),
+    env.DB.prepare("INSERT INTO email_outbox(id,member_id,recipient,body,created,next_attempt,purpose) VALUES(?,?,?,?,?,?,'reset')").bind(crypto.randomUUID(), member.id, member.email, text, now, now)
+  ]);
+}
 export async function deliverMail(env, send) {
   if (!emailConfigured(env)) return;
   const now = Date.now();
   // Atomic leases prevent concurrent request/cron runs from sending the same job.
-  const jobs = (await env.DB.prepare('UPDATE email_outbox SET next_attempt=? WHERE id IN (SELECT id FROM email_outbox WHERE sent_at IS NULL AND attempts<6 AND next_attempt<=? AND created>? ORDER BY created LIMIT 3) RETURNING *').bind(now + 300000, now, now - 48 * 3600000).all()).results;
+  const jobs = (await env.DB.prepare("UPDATE email_outbox SET next_attempt=? WHERE id IN (SELECT id FROM email_outbox WHERE sent_at IS NULL AND attempts<6 AND next_attempt<=? AND created>? AND (purpose!='reset' OR created>?) ORDER BY created LIMIT 3) RETURNING *").bind(now + 300000, now, now - 48 * 3600000, now - 3600000).all()).results;
   if (!jobs.length) return;
   const transport = send ? null : mailTransport(env);
   for (const job of jobs) {
     try {
-      const message = { from: { name: 'ISAMO', address: env.MAIL_FROM }, to: job.recipient, replyTo: 'admin@avianmodel.org', subject: 'Confirm your ISAMO account', text: job.body, messageId: `<${job.id}@avianmodel.org>`, disableFileAccess: true, disableUrlAccess: true };
+      const message = { from: { name: 'ISAMO', address: env.MAIL_FROM }, to: job.recipient, replyTo: 'admin@avianmodel.org', subject: job.purpose === 'reset' ? 'Set your ISAMO password' : 'Confirm your ISAMO account', text: job.body, messageId: `<${job.id}@avianmodel.org>`, disableFileAccess: true, disableUrlAccess: true };
       await (send ? send(message) : transport.sendMail(message));
       await env.DB.prepare("UPDATE email_outbox SET sent_at=?,body=NULL,last_error='' WHERE id=?").bind(Date.now(), job.id).run();
     } catch (error) {

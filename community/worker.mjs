@@ -1,8 +1,11 @@
 // Secrets and the D1 binding are supplied at deployment, never bundled into source.
 import { encoder, hex, token, hash, json, HttpError, fail, rawBody } from './common.mjs';
 import { paymentConfig, checkout, paymentWebhook } from './payments.mjs';
-import { emailConfigured, queueConfirmation, deliverMail, confirmEmail, unsubscribe } from './email.mjs';
+import { emailConfigured, queueConfirmation, queuePasswordReset, deliverMail, confirmEmail, unsubscribe } from './email.mjs';
 import { pageDefaults, validatePage } from '../shared/site-pages.mjs';
+import { adminMembers } from './admin-members.mjs';
+import { memberDues } from './dues.mjs';
+import { deliverMemberMail } from './member-mail.mjs';
 
 async function equal(a, b) {
   const key = await crypto.subtle.importKey('raw', encoder.encode('ISAMO constant-time comparison'), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign', 'verify']);
@@ -76,6 +79,32 @@ async function handle(request, env, ctx) {
     await rate(env, 'write:' + ip, 100, 3600);
     if (path.startsWith('/auth/')) await rate(env, 'auth:' + ip, 15, 900);
   }
+  if (/^\/admin\/(members|dues|emails)(\/|$)/.test(path)) {
+    const admin = await signedIn(request, env);
+    if (!admin.is_admin) fail(403, 'Administrator access is required.');
+    return adminMembers(request, env, admin, { readBody, field, rate }, ctx);
+  }
+  if (path === '/auth/request-reset' && method === 'POST') {
+    if (!emailConfigured(env)) fail(503, 'Email is unavailable. Use your saved recovery code or try again later.');
+    const address = email((await readBody(request)).email);
+    await rate(env, 'reset:' + await hash(address), 3, 3600);
+    const member = await env.DB.prepare('SELECT id,email,name FROM members WHERE email=?').bind(address).first();
+    if (member) { await queuePasswordReset(env, member); if (ctx) ctx.waitUntil(deliverMail(env)); }
+    return json({ ok: true });
+  }
+  if (path === '/auth/reset-password' && method === 'POST') {
+    const data = await readBody(request), pass = password(data.password);
+    if (!/^[a-f0-9]{64}$/.test(data.token || '')) fail(400, 'This password link is invalid.');
+    const salt = token(), recovery = token(), passwordDigest = await passwordHash(pass, salt, env.AUTH_PEPPER);
+    const row = await env.DB.prepare('DELETE FROM password_reset_tokens WHERE token_hash=? AND expires>? RETURNING member_id').bind(await hash(data.token), Date.now()).first();
+    if (!row) fail(400, 'This password link has expired or has already been used. Request another from the login page.');
+    await env.DB.batch([
+      env.DB.prepare('UPDATE members SET password_hash=?,salt=?,recovery_hash=?,email_verified=1 WHERE id=?').bind(passwordDigest, salt, await hash(recovery), row.member_id),
+      env.DB.prepare('DELETE FROM sessions WHERE member_id=?').bind(row.member_id),
+      env.DB.prepare('DELETE FROM password_reset_tokens WHERE member_id=?').bind(row.member_id)
+    ]);
+    return json({ ok: true, recovery });
+  }
   const pageMatch = path.match(/^\/pages\/([a-z-]+)$/);
   if (pageMatch) {
     const slug = pageMatch[1];
@@ -144,8 +173,7 @@ async function handle(request, env, ctx) {
   }
   if (path === '/membership/status' && method === 'GET') {
     const member = await signedIn(request, env);
-    const result = await env.DB.prepare('SELECT MAX(valid_until) AS paid_until FROM membership_payments WHERE member_id=? AND revoked=0').bind(member.id).first();
-    return json({ paid_until: result?.paid_until || null });
+    return json(await memberDues(env, member.id));
   }
   if (path === '/membership/checkout' && method === 'POST') {
     const member = await signedIn(request, env); await rate(env, 'checkout:' + member.id, 5, 1800);
@@ -246,8 +274,11 @@ export default {
     ]);
     await env.DB.batch([
       env.DB.prepare('DELETE FROM email_tokens WHERE expires<?').bind(Date.now()),
-      env.DB.prepare('DELETE FROM email_outbox WHERE created<?').bind(Date.now() - 7 * 86400000)
+      env.DB.prepare('DELETE FROM password_reset_tokens WHERE expires<?').bind(Date.now()),
+      env.DB.prepare('DELETE FROM email_outbox WHERE created<?').bind(Date.now() - 7 * 86400000),
+      env.DB.prepare("DELETE FROM member_emails WHERE state='draft' AND created<?").bind(Date.now() - 7 * 86400000)
     ]);
     await deliverMail(env);
+    await deliverMemberMail(env);
   }
 };
