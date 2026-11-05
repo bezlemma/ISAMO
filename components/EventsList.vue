@@ -67,6 +67,7 @@
         </div>
       </div>
     </div>
+    <img :src="baseURL + 'images/embryo-pair.jpg'" alt="Two avian embryos viewed side by side under a microscope" class="mt-12 mx-auto w-full max-w-sm rounded-2xl" loading="lazy" decoding="async" />
   </div>
 </template>
 
