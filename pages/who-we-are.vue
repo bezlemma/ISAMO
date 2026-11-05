@@ -8,11 +8,15 @@
         <p class="text-neutral-600 mb-6 whitespace-pre-line">{{ content.boardDescription }}</p>
         <div v-for="person in content.board" :key="person.name" class="mb-5"><h3 class="font-semibold text-lg">{{ person.name }}</h3><p class="text-neutral-600">{{ person.institution }}</p></div>
       </section>
-      <section id="contact" class="pt-12 scroll-mt-24"><h2 class="text-3xl font-bold mb-5">{{ content.contactTitle }}</h2><p class="text-neutral-600 mb-4 whitespace-pre-line">{{ content.contactDescription }}</p><a :href="'mailto:' + content.email" class="text-lg text-red-800 font-semibold underline">{{ content.email }}</a></section>
+      <section id="contact" class="pt-12 scroll-mt-24 grid gap-8 md:grid-cols-2 items-center">
+        <div><h2 class="text-3xl font-bold mb-5">{{ content.contactTitle }}</h2><p class="text-neutral-600 mb-4 whitespace-pre-line">{{ content.contactDescription }}</p><a :href="'mailto:' + content.email" class="text-lg text-red-800 font-semibold underline">{{ content.email }}</a></div>
+        <img :src="baseURL + 'images/feather.jpeg'" alt="A close-up of the branching structure of a feather" class="w-full h-72 sm:h-80 rounded-2xl object-cover" loading="lazy" decoding="async" />
+      </section>
     </div>
   </div>
 </template>
 <script setup>
 const { content } = useSitePage('who-we-are');
+const { baseURL } = useRuntimeConfig().app;
 useHead(() => ({ title: content.value.title + ' | ISAMO' }));
 </script>

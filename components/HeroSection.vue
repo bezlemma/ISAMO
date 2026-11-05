@@ -1,10 +1,9 @@
 <template>
-  <div class="relative min-h-screen flex items-center justify-center overflow-hidden bg-white">
-    <!-- Background Image -->
-    <div class="absolute inset-0 z-0 flex items-center justify-center pointer-events-none">
-      <!-- Chicken Image with blend mode to sit better on white -->
-      <img :src="baseURL + 'Ruby.png'" alt="" fetchpriority="high" class="h-[85%] w-auto object-contain opacity-80 mix-blend-multiply" />
-      <!-- Subtle white gradient at the bottom to fade it out if needed -->
+  <div class="hero relative min-h-screen flex items-center justify-center overflow-hidden bg-white">
+    <div class="avian-models absolute inset-0 z-0 pointer-events-none" role="img" aria-label="Watercolor illustrations of a quail, chicken and zebra finch">
+      <img :src="baseURL + 'images/quail.png'" alt="" class="quail" decoding="async" />
+      <img :src="baseURL + 'Ruby.png'" alt="" fetchpriority="high" class="chicken" />
+      <img :src="baseURL + 'images/zebra-finch.png'" alt="" class="finch" decoding="async" />
       <div class="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent"></div>
     </div>
 
@@ -31,3 +30,17 @@
 <script setup>
 const { baseURL } = useRuntimeConfig().app;
 </script>
+
+<style scoped>
+.avian-models img { position: absolute; object-fit: contain; mix-blend-mode: multiply; }
+.chicken { height: 85%; width: 48%; left: 26%; top: 7.5%; opacity: .8; }
+.quail { width: 34%; height: 44%; left: -1%; top: 32%; opacity: .9; }
+.finch { width: 32%; height: 40%; right: -1%; top: 35%; opacity: .9; }
+@media (max-width: 639px) {
+  .hero { min-height: max(100svh, 52rem); }
+  .chicken { width: 86%; left: 7%; top: 2%; height: 70%; }
+  .quail { width: 48%; left: 1%; top: 79%; height: 20%; }
+  .finch { width: 48%; right: 1%; top: 79%; height: 20%; }
+  .avian-models > div { opacity: .25; }
+}
+</style>

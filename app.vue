@@ -16,7 +16,6 @@
               <NuxtLink to="/events" class="px-3 py-2 rounded-md text-sm font-medium text-neutral-600 hover:text-red-800 transition-colors" active-class="text-red-800 font-bold">Events</NuxtLink>
               <NuxtLink to="/resources" class="px-3 py-2 rounded-md text-sm font-medium text-neutral-600 hover:text-red-800 transition-colors" active-class="text-red-800 font-bold">Resources</NuxtLink>
               <NuxtLink to="/who-we-are" class="px-3 py-2 rounded-md text-sm font-medium text-neutral-600 hover:text-red-800 transition-colors" active-class="text-red-800 font-bold">Who are we</NuxtLink>
-              <NuxtLink to="/community" class="px-3 py-2 rounded-md text-sm font-medium text-neutral-600 hover:text-red-800 transition-colors" active-class="text-red-800 font-bold">Community</NuxtLink>
               <NuxtLink to="/membership" class="px-3 py-2 rounded-md text-sm font-medium text-neutral-600 hover:text-red-800 transition-colors" active-class="text-red-800 font-bold">Membership</NuxtLink>
             </div>
           </div>
@@ -41,7 +40,6 @@
           <NuxtLink to="/events" class="block px-3 py-2 rounded-md text-base font-medium text-neutral-600 hover:text-red-800 hover:bg-gray-50" active-class="text-red-800 font-bold bg-red-50" @click="isOpen = false">Events</NuxtLink>
           <NuxtLink to="/resources" class="block px-3 py-2 rounded-md text-base font-medium text-neutral-600 hover:text-red-800 hover:bg-gray-50" active-class="text-red-800 font-bold bg-red-50" @click="isOpen = false">Resources</NuxtLink>
           <NuxtLink to="/who-we-are" class="block px-3 py-2 rounded-md text-base font-medium text-neutral-600 hover:text-red-800 hover:bg-gray-50" active-class="text-red-800 font-bold bg-red-50" @click="isOpen = false">Who are we</NuxtLink>
-          <NuxtLink to="/community" class="block px-3 py-2 rounded-md text-base font-medium text-neutral-600 hover:text-red-800 hover:bg-gray-50" active-class="text-red-800 font-bold bg-red-50" @click="isOpen = false">Community</NuxtLink>
           <NuxtLink to="/membership" class="block px-3 py-2 rounded-md text-base font-medium text-neutral-600 hover:text-red-800 hover:bg-gray-50" active-class="text-red-800 font-bold bg-red-50" @click="isOpen = false">Membership</NuxtLink>
         </div>
       </div>
