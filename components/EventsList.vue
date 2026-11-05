@@ -6,6 +6,7 @@
     </div>
 
     <PageEditor page-id="events" />
+    <img :src="baseURL + 'images/eggs.jpeg'" alt="A tray of brown eggs decorated with hand-drawn faces" class="w-full h-48 sm:h-72 object-cover rounded-2xl mb-8" decoding="async" />
     <div class="grid gap-8 md:grid-cols-3 mb-16">
       <section v-for="series in seriesList" :id="series.id" :key="series.id" class="bg-white border border-slate-200 rounded-2xl p-8 scroll-mt-24">
         <h2 class="text-2xl font-bold mb-4">{{ series.name }}</h2><p class="text-neutral-600 leading-7 mb-6">{{ series.description }}</p><a :href="series.url" target="_blank" rel="noopener noreferrer" class="text-red-800 font-semibold underline">{{ series.linkLabel }}</a>
@@ -71,6 +72,7 @@
 
 <script setup>
 const { content } = useSitePage('events');
+const { baseURL } = useRuntimeConfig().app;
 const seriesList = computed(() => content.value.series);
 useHead(() => ({ title: content.value.title + ' | ISAMO' }));
 const { api } = useCommunity();

@@ -7,7 +7,7 @@ import { deriveKey, encrypt, decrypt, ITERATIONS } from './preview-crypto.mjs';
 
 const root = path.resolve(import.meta.dirname, '..');
 const base = '/';
-const mime = {'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.avif':'image/avif','.webp':'image/webp','.svg':'image/svg+xml','.woff2':'font/woff2','.txt':'text/plain','.ico':'image/x-icon'};
+const mime = {'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json','.png':'image/png','.gif':'image/gif','.jpg':'image/jpeg','.jpeg':'image/jpeg','.avif':'image/avif','.webp':'image/webp','.svg':'image/svg+xml','.woff2':'font/woff2','.txt':'text/plain','.ico':'image/x-icon'};
 
 export async function protect({source = path.join(root,'.output/public'), output = path.join(root,'preview-dist'), password = process.env.ISAMO_DEMO_PASSWORD} = {}) {
   if (!password || password.length < 20) throw new Error('ISAMO_DEMO_PASSWORD must contain at least 20 characters. Nothing was published.');
