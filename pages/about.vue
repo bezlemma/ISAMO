@@ -11,6 +11,12 @@
         <img :src="baseURL + 'images/' + embryo.file" :alt="embryo.alt" class="w-full h-64 sm:h-96 object-contain" loading="lazy" decoding="async" />
       </figure>
     </div>
+    <div class="grid gap-5 sm:grid-cols-3 mt-5" aria-label="Embryo photographs and embroidery">
+      <figure v-for="image in additionalImages" :key="image.file" class="overflow-hidden rounded-2xl border border-neutral-200 bg-white">
+        <img :src="baseURL + 'images/' + image.file" :alt="image.alt" class="w-full h-80 object-contain bg-neutral-950" loading="lazy" decoding="async" />
+        <figcaption class="px-4 py-3 text-sm text-neutral-600">{{ image.caption }}</figcaption>
+      </figure>
+    </div>
   </div>
 </template>
 <script setup>
@@ -20,6 +26,11 @@ const embryos = [
   { file: 'embryo-hh7.png', alt: 'Fluorescence microscopy of an avian embryo at stage HH7' },
   { file: 'embryo-7ss.png', alt: 'Fluorescence microscopy of an avian embryo at seven somites' },
   { file: 'embryo-10ss.png', alt: 'Fluorescence microscopy of an avian embryo at ten somites' }
+];
+const additionalImages = [
+  { file: 'embryo-in-egg.jpg', alt: 'An avian embryo and branching blood vessels visible through an opening in an eggshell', caption: 'Embryo in the egg' },
+  { file: 'embryo-embroidery.jpg', alt: 'Embroidered artwork depicting an embryo surrounded by branching blood vessels', caption: 'Embryo embroidery' },
+  { file: 'embryo-pair.jpg', alt: 'Two avian embryos viewed side by side under a microscope', caption: 'Avian embryos' }
 ];
 useHead(() => ({ title: content.value.title + ' | ISAMO' }));
 </script>
