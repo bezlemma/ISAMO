@@ -26,6 +26,7 @@ test('only administrators can publish page content, without exposing member info
     assert.equal(saved.status, 200);
     assert.equal(saved.body.revision, 1);
     const viewed = (await call('/pages/' + slug)).body;
+    if (slug === 'who-we-are') assert.deepEqual(viewed.content.board, updated.board);
     assert.equal(viewed.content.title, updated.title);
     assert.equal(viewed.content.private_note, undefined);
     assert.equal(viewed.updated_by, undefined);
@@ -47,6 +48,9 @@ test('page editing rejects unsafe links, excessive input and changes to event id
     const content = structuredClone(pageDefaults.resources);
     content.resources[0].url = url;
     assert.equal((await save('resources', content)).status, 400);
+    const who = structuredClone(pageDefaults['who-we-are']);
+    who.board[0].website = url;
+    assert.equal((await save('who-we-are', who)).status, 400);
   }
   const events = structuredClone(pageDefaults.events); events.series[0].id = 'untrusted';
   assert.equal((await save('events', events)).status, 400);

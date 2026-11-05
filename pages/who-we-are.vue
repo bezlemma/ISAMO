@@ -6,7 +6,10 @@
       <section id="advisory-board" class="py-12 border-b border-neutral-200 scroll-mt-24">
         <h2 class="text-3xl font-bold mb-6">{{ content.boardTitle }}</h2>
         <p class="text-neutral-600 mb-6 whitespace-pre-line">{{ content.boardDescription }}</p>
-        <div v-for="person in content.board" :key="person.name" class="mb-5"><h3 class="font-semibold text-lg">{{ person.name }}</h3><p class="text-neutral-600">{{ person.institution }}</p></div>
+        <div v-for="person in content.board" :key="person.name" class="mb-5">
+          <h3 class="font-semibold text-lg"><a v-if="person.website" :href="person.website" target="_blank" rel="noopener noreferrer" class="text-red-800 underline underline-offset-4 hover:text-red-900">{{ person.name }}</a><span v-else>{{ person.name }}</span></h3>
+          <p class="text-neutral-600">{{ person.institution }}</p>
+        </div>
       </section>
       <section id="contact" class="pt-12 scroll-mt-24 grid gap-8 md:grid-cols-2 items-center">
         <div><h2 class="text-3xl font-bold mb-5">{{ content.contactTitle }}</h2><p class="text-neutral-600 mb-4 whitespace-pre-line">{{ content.contactDescription }}</p><a :href="'mailto:' + content.email" class="text-lg text-red-800 font-semibold underline">{{ content.email }}</a></div>
