@@ -1,6 +1,6 @@
 <template>
   <section class="bg-white border rounded-2xl p-6 sm:p-8" aria-labelledby="dues-heading">
-    <div class="flex justify-between gap-4"><h2 id="dues-heading" tabindex="-1" class="text-2xl font-bold scroll-mt-24">{{ person.name }}</h2><button class="link" @click="$emit('close')">Close</button></div>
+    <div class="flex justify-between gap-4"><h2 id="dues-heading" tabindex="-1" class="text-2xl font-bold scroll-mt-8">{{ person.name }}</h2><button class="link" @click="$emit('close')">Close</button></div>
     <p class="mt-2 break-all">{{ person.email }}</p><p class="text-neutral-600">{{ person.institution }} · {{ person.role }}</p>
     <p class="text-sm text-neutral-600 mt-2">Joined {{ showDate(person.created) }} · {{ person.email_verified ? 'Email confirmed' : 'Email not confirmed' }} · {{ person.mailing_list ? 'Subscribed to news' : 'Opted out of news' }}<span v-if="person.is_admin"> · Administrator</span></p>
     <h3 class="text-xl font-bold mt-8 mb-4">Record dues</h3>

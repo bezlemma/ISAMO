@@ -1,5 +1,5 @@
 <template>
-  <div class="hero relative min-h-screen flex items-center justify-center overflow-hidden bg-white">
+  <div class="hero relative flex items-center justify-center overflow-hidden bg-white">
     <div ref="birds" class="avian-models absolute inset-0 z-0 pointer-events-none" :class="{ 'is-ready': imagesReady, 'is-paused': paused }" role="img" aria-label="Watercolor illustrations of a quail, chicken and zebra finch">
       <img :src="baseURL + 'images/quail.png'" alt="" class="quail" decoding="async" />
       <img :src="baseURL + 'Ruby.png'" alt="" fetchpriority="high" class="chicken" />
@@ -56,6 +56,7 @@ onBeforeUnmount(() => { unmounted = true; });
 </script>
 
 <style scoped>
+.hero { min-height: calc(100svh - var(--header-height) - 1px); }
 .avian-models img { position: absolute; object-fit: contain; mix-blend-mode: multiply; }
 .chicken { height: 85%; width: 48%; left: 26%; top: 7.5%; opacity: .8; }
 .quail { width: 34%; height: 44%; left: -1%; top: 32%; opacity: .9; }
@@ -98,7 +99,7 @@ onBeforeUnmount(() => { unmounted = true; });
 }
 
 @media (max-width: 639px) {
-  .hero { min-height: max(100svh, 52rem); }
+  .hero { min-height: calc(max(100svh, 52rem) - var(--header-height) - 1px); }
   .chicken { width: 86%; left: 7%; top: 2%; height: 70%; }
   .quail { width: 48%; left: 1%; top: 79%; height: 20%; }
   .finch { width: 48%; left: 51%; top: 79%; height: 20%; }

@@ -1,7 +1,7 @@
 <template>
   <div class="flex items-center gap-3 sm:gap-4">
     <NuxtLink to="/" aria-label="ISAMO home">
-      <img :src="baseURL + 'logos/' + theme + '.svg'" alt="ISAMO" width="390" height="127" class="h-auto w-32 sm:w-40" />
+      <img :src="baseURL + 'logos/' + theme + '.svg'" alt="ISAMO" width="390" height="127" class="h-auto w-[clamp(10rem,50vw,13rem)] sm:w-60 xl:w-64" />
     </NuxtLink>
     <div class="flex flex-col border-l-2 border-brand-trim pl-2 sm:pl-3">
       <label for="site-theme" class="text-xs leading-tight text-neutral-600">Theme</label>

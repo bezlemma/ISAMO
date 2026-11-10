@@ -1,5 +1,5 @@
 <template>
-  <div class="pt-24 pb-12 px-4 max-w-3xl mx-auto">
+  <div class="pt-8 pb-12 px-4 max-w-3xl mx-auto">
     <div v-if="member" class="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
       <div class="flex items-center justify-between gap-4 mb-8">
         <h1 class="text-3xl font-bold text-neutral-900">Welcome, {{ member.name }}</h1>

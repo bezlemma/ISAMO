@@ -1,5 +1,5 @@
 <template>
-  <div class="pt-24 pb-12 px-4 max-w-7xl mx-auto">
+  <div class="pt-8 pb-12 px-4 max-w-7xl mx-auto">
     <div class="text-center mb-16">
       <h1 class="text-4xl md:text-5xl font-bold mb-4 text-slate-900">{{ content.title }}</h1>
 
@@ -8,7 +8,7 @@
     <PageEditor page-id="events" />
     <img :src="baseURL + 'images/eggs.jpeg'" alt="A tray of brown eggs decorated with hand-drawn faces" class="w-full h-48 sm:h-72 object-cover rounded-2xl mb-8" decoding="async" />
     <div class="grid gap-8 md:grid-cols-3 mb-16">
-      <section v-for="series in seriesList" :id="series.id" :key="series.id" class="bg-white border border-slate-200 rounded-2xl p-8 scroll-mt-24">
+      <section v-for="series in seriesList" :id="series.id" :key="series.id" class="bg-white border border-slate-200 rounded-2xl p-8 scroll-mt-8">
         <h2 class="text-2xl font-bold mb-4">{{ series.name }}</h2><p class="text-neutral-600 leading-7 mb-6">{{ series.description }}</p><a :href="series.url" target="_blank" rel="noopener noreferrer" class="text-brand font-semibold underline">{{ series.linkLabel }}</a>
       </section>
     </div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="pt-24 pb-12 px-4 max-w-3xl mx-auto">
+  <div class="pt-8 pb-12 px-4 max-w-3xl mx-auto">
     <div class="text-center mb-12"><h1 class="text-4xl md:text-5xl font-bold mb-4 text-slate-900">Community</h1></div>
     <p class="text-neutral-600 mb-6">News, questions, and opportunities from avian researchers.</p>
     <div class="flex flex-wrap items-center justify-between gap-4 mb-8" aria-label="Your community account">
