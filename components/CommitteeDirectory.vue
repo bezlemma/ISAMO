@@ -1,5 +1,5 @@
 <template>
-  <section id="trustees" class="bg-white py-12 scroll-mt-24">
+  <section id="trustees" class="bg-white py-12 scroll-mt-8">
     <div class="mx-auto grid max-w-7xl gap-x-8 gap-y-20 px-6 lg:px-8 xl:grid-cols-3">
       <div class="max-w-2xl">
         <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">{{ title }}</h2>

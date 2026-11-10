@@ -1,9 +1,9 @@
 <template>
   <div class="min-h-screen bg-brand-surface text-neutral-900 font-sans">
     <a href="#main-content" class="skip-link">Skip to content</a>
-    <nav aria-label="Main navigation" class="fixed top-0 left-0 right-0 z-50 border-b border-neutral-200 bg-white/90 backdrop-blur-md">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16">
+    <nav aria-label="Main navigation" class="sticky top-0 z-50 border-b border-neutral-200 bg-white/90 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto px-4 max-[374px]:px-3 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between gap-2 h-[var(--header-height)]">
           <HeaderBrand />
           <div class="hidden lg:block">
             <div class="nav-links ml-3 flex items-baseline gap-1 xl:gap-4">
@@ -29,7 +29,7 @@
         </div>
       </div>
 
-      <div v-show="isOpen" class="lg:hidden" id="mobile-menu">
+      <div v-show="isOpen" class="absolute inset-x-0 top-full max-h-[calc(100dvh-var(--header-height))] overflow-y-auto lg:hidden" id="mobile-menu">
         <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-b border-neutral-200 shadow-lg">
           <NuxtLink to="/" class="block px-3 py-2 rounded-md text-base font-medium text-neutral-600 hover:text-brand hover:bg-gray-50" active-class="text-brand font-bold bg-brand-soft" @click="isOpen = false">Home</NuxtLink>
           <NuxtLink to="/about" class="block px-3 py-2 rounded-md text-base font-medium text-neutral-600 hover:text-brand hover:bg-gray-50" active-class="text-brand font-bold bg-brand-soft" @click="isOpen = false">What is ISAMO</NuxtLink>
@@ -55,6 +55,8 @@ useHead({
 </script>
 
 <style>
+html { --header-height: 5rem; scroll-padding-top: var(--header-height); }
+@media (min-width: 640px) { html { --header-height: 6rem; } }
 :focus-visible { outline: 3px solid rgb(var(--brand)); outline-offset: 4px; }
 .skip-link { position: fixed; top: -100px; left: 12px; z-index: 100; padding: 12px 18px; background: white; color: rgb(var(--brand)); }
 .nav-links a[aria-current="page"] { text-decoration: underline 2px rgb(var(--brand-trim)); text-underline-offset: 6px; }

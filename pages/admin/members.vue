@@ -1,5 +1,5 @@
 <template>
-  <div class="pt-24 pb-16 px-4 sm:px-6 max-w-7xl mx-auto">
+  <div class="pt-8 pb-16 px-4 sm:px-6 max-w-7xl mx-auto">
     <h1 class="text-3xl sm:text-4xl font-bold mb-6">Membership management</h1>
     <p v-if="!ready">Loading your account…</p>
     <div v-else-if="!member?.is_admin"><p>Sign in with a trustee administrator account to manage members.</p><NuxtLink to="/membership?next=admin" class="link inline-block mt-4">Go to member login</NuxtLink></div>

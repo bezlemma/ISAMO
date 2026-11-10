@@ -1,5 +1,5 @@
 <template>
-  <div class="pt-24 pb-16 px-4 max-w-lg mx-auto">
+  <div class="pt-8 pb-16 px-4 max-w-lg mx-auto">
     <h1 class="text-3xl font-bold mb-6">Set your ISAMO password</h1>
     <div v-if="recovery" class="bg-white border rounded-xl p-6 space-y-4"><p>Your password has been changed. Save this recovery code somewhere private.</p><code class="block break-all bg-neutral-50 p-3">{{ recovery }}</code><NuxtLink to="/membership" class="text-brand underline block">Sign in to ISAMO</NuxtLink></div>
     <form v-else @submit.prevent="submit" class="bg-white border rounded-xl p-6 space-y-4">
