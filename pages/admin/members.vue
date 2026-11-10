@@ -42,8 +42,8 @@ watch(active, async person => { if (person) { await nextTick(); const heading = 
 </script>
 <style scoped>
 .field { @apply block w-full mt-1 bg-neutral-50 border border-neutral-300 rounded-lg px-3 py-3 text-neutral-900; }
-.primary { @apply bg-red-800 hover:bg-red-900 disabled:opacity-50 px-5 py-3 rounded-lg font-semibold text-white; }
+.primary { @apply bg-brand-fill hover:bg-brand-hover disabled:opacity-50 px-5 py-3 rounded-lg font-semibold text-brand-on-fill; }
 .secondary { @apply border border-neutral-300 bg-white hover:bg-neutral-100 disabled:opacity-50 px-4 py-3 rounded-lg font-semibold; }
-.link { @apply text-red-800 underline underline-offset-2; }
-input[type=checkbox] { @apply w-5 h-5 accent-red-800; }
+.link { @apply text-brand underline underline-offset-2; }
+input[type=checkbox] { @apply w-5 h-5 accent-brand; }
 </style>

@@ -21,7 +21,7 @@
   setInterval(checkAccess, 30000);
   const button = document.createElement('button');
   button.textContent = 'Lock demo'; button.type = 'button';
-  button.style.cssText = 'position:fixed;bottom:18px;right:18px;z-index:100;padding:10px 18px;border:1px solid #991b1b;border-radius:24px;background:white;color:#991b1b;font:600 14px system-ui;cursor:pointer;box-shadow:0 2px 10px #0001';
+  button.style.cssText = 'position:fixed;bottom:18px;right:18px;z-index:100;padding:10px 18px;border:1px solid currentColor;border-radius:24px;background:white;color:rgb(var(--brand,153 27 27));font:600 14px system-ui;cursor:pointer;box-shadow:0 2px 10px #0001';
   button.onclick = async () => { button.disabled = true; await send('lock'); location.replace('/'); };
   document.body.append(button);
   navigator.serviceWorker.register('/preview-worker.js', {scope:'/', updateViaCache:'none'}).catch(() => {});

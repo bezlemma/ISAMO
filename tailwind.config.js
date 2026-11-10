@@ -9,7 +9,14 @@ export default {
     "./error.vue",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        brand: Object.fromEntries(
+          ['DEFAULT', 'deep', 'fill', 'on-fill', 'hover', 'highlight', 'trim', 'soft', 'line', 'surface']
+            .map(name => [name, 'rgb(var(--brand' + (name === 'DEFAULT' ? '' : '-' + name) + ') / <alpha-value>)'])
+        ),
+      },
+    },
   },
   plugins: [],
 }

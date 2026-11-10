@@ -3,6 +3,7 @@ export default defineNuxtConfig({
   srcDir: '.',
   devtools: { enabled: false },
   modules: ['@nuxtjs/tailwindcss'],
+  css: ['~/assets/themes.css'],
   runtimeConfig: {
     public: {
       communityUrl: 'http://127.0.0.1:8787',

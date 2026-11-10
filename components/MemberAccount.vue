@@ -3,23 +3,23 @@
     <div v-if="member" class="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
       <div class="flex items-center justify-between gap-4 mb-8">
         <h1 class="text-3xl font-bold text-neutral-900">Welcome, {{ member.name }}</h1>
-        <button @click="logout" class="text-sm text-red-800 font-semibold">Sign Out</button>
+        <button @click="logout" class="text-sm text-brand font-semibold">Sign Out</button>
       </div>
-      <div v-if="recovery" class="rounded-xl border border-red-200 bg-red-50 p-6 mb-8">
+      <div v-if="recovery" class="rounded-xl border border-brand-line bg-brand-soft p-6 mb-8">
         <h2 class="font-bold mb-2">Save your recovery code</h2>
         <p class="text-neutral-700 mb-3">Use this code to reset your password if you forget it. Keep it somewhere private.</p>
         <code class="block break-all select-all bg-white p-3 rounded-lg text-sm">{{ recovery }}</code>
-        <button @click="recovery = ''" class="mt-4 text-red-800 font-semibold underline">I’ve saved it</button>
+        <button @click="recovery = ''" class="mt-4 text-brand font-semibold underline">I’ve saved it</button>
       </div>
-      <NuxtLink :to="route.query.next === 'event' ? '/community?compose=event' : '/community'" class="inline-block px-6 py-3 bg-red-800 text-white rounded-full font-semibold mb-8">{{ route.query.next === 'event' ? 'Share an event' : 'Visit the community' }}</NuxtLink>
+      <NuxtLink :to="route.query.next === 'event' ? '/community?compose=event' : '/community'" class="inline-block px-6 py-3 bg-brand-fill text-brand-on-fill rounded-full font-semibold mb-8">{{ route.query.next === 'event' ? 'Share an event' : 'Visit the community' }}</NuxtLink>
       <p v-if="notice" role="status" class="mb-6 text-neutral-700">{{ notice }}</p>
       <div v-if="!member.email_verified && settings.email_enabled" class="bg-neutral-50 rounded-xl p-5 mb-8">
         <p>Confirm your email address to receive mailing-list updates.</p>
-        <button @click="resend" :disabled="busy" class="text-red-800 underline mt-2">Send confirmation email</button>
+        <button @click="resend" :disabled="busy" class="text-brand underline mt-2">Send confirmation email</button>
       </div>
       <div class="flex items-center justify-between mb-4">
         <h2 class="text-lg font-bold">Your Profile</h2>
-        <button @click="toggleEdit" class="text-sm text-red-800 font-semibold">{{ edit ? 'Cancel' : 'Edit Profile' }}</button>
+        <button @click="toggleEdit" class="text-sm text-brand font-semibold">{{ edit ? 'Cancel' : 'Edit Profile' }}</button>
       </div>
       <form v-if="edit" @submit.prevent="saveProfile" class="space-y-4 bg-neutral-50 p-6 rounded-xl border border-neutral-200">
         <div><label for="profile-name" class="block font-medium mb-1">Full Name</label><input id="profile-name" v-model="editName" required maxlength="100" autocomplete="name" class="field" /></div>
@@ -39,7 +39,7 @@
         <h2 class="text-lg font-bold mb-3">Administration</h2>
         <NuxtLink to="/admin/members" class="primary inline-block mb-5">Manage members</NuxtLink>
         <p class="text-neutral-600 mb-3">Download members who have confirmed their email and chosen to receive updates.</p>
-        <button @click="downloadMailingList" :disabled="busy" class="text-red-800 font-semibold underline">Download mailing list</button>
+        <button @click="downloadMailingList" :disabled="busy" class="text-brand font-semibold underline">Download mailing list</button>
       </section>
       <p v-if="error" role="alert" class="text-red-800 mt-4">{{ error }}</p>
     </div>
@@ -60,9 +60,9 @@
         <p v-if="notice" role="status">{{ notice }}</p>
         <button :disabled="busy" type="submit" class="primary w-full">{{ busy ? 'Please wait…' : mode === 'register' ? 'Create Account' : mode === 'request-reset' ? 'Email reset link' : mode === 'recover' ? 'Reset Password' : 'Sign In' }}</button>
         <div class="text-center text-sm space-y-3">
-          <button v-if="mode === 'login'" type="button" @click="changeMode('request-reset')" class="block w-full text-neutral-600 hover:text-red-800">Forgot Password?</button>
-          <button v-if="mode === 'request-reset'" type="button" @click="changeMode('recover')" class="block w-full text-neutral-600 hover:text-red-800">Use a saved recovery code instead</button>
-          <button type="button" @click="changeMode(mode === 'login' ? 'register' : 'login')" class="text-red-800 hover:underline font-medium">{{ mode === 'login' ? 'Need an account? Sign Up' : 'Back to Sign In' }}</button>
+          <button v-if="mode === 'login'" type="button" @click="changeMode('request-reset')" class="block w-full text-neutral-600 hover:text-brand">Forgot Password?</button>
+          <button v-if="mode === 'request-reset'" type="button" @click="changeMode('recover')" class="block w-full text-neutral-600 hover:text-brand">Use a saved recovery code instead</button>
+          <button type="button" @click="changeMode(mode === 'login' ? 'register' : 'login')" class="text-brand hover:underline font-medium">{{ mode === 'login' ? 'Need an account? Sign Up' : 'Back to Sign In' }}</button>
         </div>
       </form>
     </div>
@@ -116,5 +116,5 @@ onMounted(async () => { try { settings.value = await api('/membership/config'); 
 </script>
 <style scoped>
 .field { @apply w-full bg-neutral-50 border border-neutral-200 rounded-lg px-4 py-3 text-neutral-900; }
-.primary { @apply bg-red-800 hover:bg-red-900 disabled:opacity-50 px-5 py-3 rounded-lg font-semibold text-white; }
+.primary { @apply bg-brand-fill hover:bg-brand-hover disabled:opacity-50 px-5 py-3 rounded-lg font-semibold text-brand-on-fill; }
 </style>
