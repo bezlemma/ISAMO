@@ -2,9 +2,9 @@
   <div class="pt-24 pb-16 px-4 max-w-xl mx-auto"><section class="bg-white border border-neutral-200 rounded-2xl p-8">
     <h1 class="text-3xl font-bold mb-6">Confirm your email</h1>
     <p v-if="done" role="status" class="mb-6">Your email address has been confirmed.</p>
-    <template v-else><p class="text-neutral-600 mb-6">Confirm this address for your ISAMO account.</p><button @click="confirm" :disabled="busy || !code" class="bg-red-800 text-white rounded-lg px-5 py-3 font-semibold disabled:opacity-50">{{ busy ? 'Confirming…' : 'Confirm email address' }}</button></template>
+    <template v-else><p class="text-neutral-600 mb-6">Confirm this address for your ISAMO account.</p><button @click="confirm" :disabled="busy || !code" class="bg-brand-fill text-brand-on-fill rounded-lg px-5 py-3 font-semibold disabled:opacity-50">{{ busy ? 'Confirming…' : 'Confirm email address' }}</button></template>
     <p v-if="error" role="alert" class="text-red-800 mt-4">{{ error }}</p>
-    <NuxtLink to="/membership" class="block mt-6 text-red-800 underline">Go to your account</NuxtLink>
+    <NuxtLink to="/membership" class="block mt-6 text-brand underline">Go to your account</NuxtLink>
   </section></div>
 </template>
 <script setup>

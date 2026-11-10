@@ -1,13 +1,13 @@
 <template>
   <div class="pt-24 pb-16 px-4 max-w-lg mx-auto">
     <h1 class="text-3xl font-bold mb-6">Set your ISAMO password</h1>
-    <div v-if="recovery" class="bg-white border rounded-xl p-6 space-y-4"><p>Your password has been changed. Save this recovery code somewhere private.</p><code class="block break-all bg-neutral-50 p-3">{{ recovery }}</code><NuxtLink to="/membership" class="text-red-800 underline block">Sign in to ISAMO</NuxtLink></div>
+    <div v-if="recovery" class="bg-white border rounded-xl p-6 space-y-4"><p>Your password has been changed. Save this recovery code somewhere private.</p><code class="block break-all bg-neutral-50 p-3">{{ recovery }}</code><NuxtLink to="/membership" class="text-brand underline block">Sign in to ISAMO</NuxtLink></div>
     <form v-else @submit.prevent="submit" class="bg-white border rounded-xl p-6 space-y-4">
       <label class="block">New password<input v-model="password" type="password" required minlength="12" maxlength="128" autocomplete="new-password" class="field" /></label>
       <label class="block">Confirm password<input v-model="confirmation" type="password" required autocomplete="new-password" class="field" /></label>
       <p v-if="error" role="alert" class="text-red-800">{{ error }}</p>
-      <button :disabled="busy || !code" class="bg-red-800 text-white rounded-lg px-5 py-3 font-semibold disabled:opacity-50">{{ busy ? 'Saving…' : 'Save password' }}</button>
-      <NuxtLink to="/membership" class="text-red-800 underline block">Back to member login</NuxtLink>
+      <button :disabled="busy || !code" class="bg-brand-fill text-brand-on-fill rounded-lg px-5 py-3 font-semibold disabled:opacity-50">{{ busy ? 'Saving…' : 'Save password' }}</button>
+      <NuxtLink to="/membership" class="text-brand underline block">Back to member login</NuxtLink>
     </form>
   </div>
 </template>

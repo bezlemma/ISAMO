@@ -64,6 +64,6 @@ onMounted(async () => { try { await load(); } catch (e) { error.value = e.messag
 </script>
 <style scoped>
 .field { @apply block w-full mt-1 bg-neutral-50 border border-neutral-300 rounded-lg px-3 py-3 text-neutral-900; }
-.primary { @apply bg-red-800 hover:bg-red-900 disabled:opacity-50 px-5 py-3 rounded-lg font-semibold text-white; }
-.link { @apply text-red-800 underline underline-offset-2; }
+.primary { @apply bg-brand-fill hover:bg-brand-hover disabled:opacity-50 px-5 py-3 rounded-lg font-semibold text-brand-on-fill; }
+.link { @apply text-brand underline underline-offset-2; }
 </style>

@@ -16,12 +16,12 @@
             </div>
             <div>
               <h3 class="text-base font-semibold leading-7 tracking-tight text-neutral-900">
-                <a v-if="person.website" :href="person.website" target="_blank" rel="noopener noreferrer" class="hover:text-red-800 transition-colors">
+                <a v-if="person.website" :href="person.website" target="_blank" rel="noopener noreferrer" class="hover:text-brand transition-colors">
                   {{ person.name }}
                 </a>
                 <span v-else>{{ person.name || 'Unknown' }}</span>
               </h3>
-              <p class="text-sm font-semibold text-red-800">{{ person.role }}</p>
+              <p class="text-sm font-semibold text-brand">{{ person.role }}</p>
               <p class="text-sm text-neutral-600">{{ person.institution }}</p>
               <a v-if="person.email" :href="'mailto:' + person.email" class="text-sm text-neutral-500 hover:text-neutral-900 block mt-1">
                 {{ person.email }}

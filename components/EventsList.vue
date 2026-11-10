@@ -9,25 +9,25 @@
     <img :src="baseURL + 'images/eggs.jpeg'" alt="A tray of brown eggs decorated with hand-drawn faces" class="w-full h-48 sm:h-72 object-cover rounded-2xl mb-8" decoding="async" />
     <div class="grid gap-8 md:grid-cols-3 mb-16">
       <section v-for="series in seriesList" :id="series.id" :key="series.id" class="bg-white border border-slate-200 rounded-2xl p-8 scroll-mt-24">
-        <h2 class="text-2xl font-bold mb-4">{{ series.name }}</h2><p class="text-neutral-600 leading-7 mb-6">{{ series.description }}</p><a :href="series.url" target="_blank" rel="noopener noreferrer" class="text-red-800 font-semibold underline">{{ series.linkLabel }}</a>
+        <h2 class="text-2xl font-bold mb-4">{{ series.name }}</h2><p class="text-neutral-600 leading-7 mb-6">{{ series.description }}</p><a :href="series.url" target="_blank" rel="noopener noreferrer" class="text-brand font-semibold underline">{{ series.linkLabel }}</a>
       </section>
     </div>
     <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
       <h2 class="text-2xl font-bold">Community event announcements</h2>
       <div class="flex flex-wrap items-center gap-5">
         <label for="event-filter" class="sr-only">Filter events</label><select id="event-filter" v-model="selectedSeries" class="border border-neutral-200 bg-white rounded-lg px-4 py-3"><option value="">All events</option><option v-for="series in seriesList" :key="series.id" :value="series.id">{{ series.name }}</option><option value="other">Other events</option></select>
-        <NuxtLink :to="{ path: '/community', query: { compose: 'event', series: selectedSeries || 'other' } }" class="text-red-800 font-semibold underline">Share an event</NuxtLink>
+        <NuxtLink :to="{ path: '/community', query: { compose: 'event', series: selectedSeries || 'other' } }" class="text-brand font-semibold underline">Share an event</NuxtLink>
       </div>
     </div>
     <!-- Loading State -->
     <div v-if="pending" class="flex justify-center py-20">
-      <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brand"></div>
     </div>
 
     <!-- Error State -->
     <div v-else-if="error" class="text-center py-20 text-red-400">
       <p>{{ error }}</p>
-      <button @click="load" class="mt-4 text-red-800 font-semibold underline">Try again</button>
+      <button @click="load" class="mt-4 text-brand font-semibold underline">Try again</button>
     </div>
 
     <!-- Empty State -->
@@ -38,7 +38,7 @@
     <!-- Events Grid -->
     <div v-else class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
       <div v-for="event in filteredEvents" :key="event.id"
-           class="group bg-white border border-slate-200 rounded-2xl overflow-hidden hover:border-blue-500/50 transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-500/10">
+           class="group bg-white border border-slate-200 rounded-2xl overflow-hidden hover:border-brand/50 transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-brand/10">
 
         <!-- Event Image -->
         <div class="aspect-video bg-slate-100 relative overflow-hidden">
@@ -49,19 +49,19 @@
 
         <div class="p-6">
           <div class="flex items-center text-sm text-neutral-500 mb-4">
-            <svg class="mr-1.5 h-5 w-5 text-red-800" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <svg class="mr-1.5 h-5 w-5 text-brand" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0h18M5.25 12h13.5" />
             </svg>
             {{ new Date(event.event_date + 'T12:00:00').toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) }}
           </div>
 
-          <h3 class="text-xl font-bold text-neutral-900 group-hover:text-red-800 transition-colors mb-2">
+          <h3 class="text-xl font-bold text-neutral-900 group-hover:text-brand transition-colors mb-2">
             {{ event.title }}
           </h3>
 
           <p class="text-neutral-600 whitespace-pre-wrap mb-4">{{ event.body }}</p>
 
-          <a v-if="event.link" :href="event.link" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-sm font-semibold text-red-800 hover:text-red-700">
+          <a v-if="event.link" :href="event.link" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-sm font-semibold text-brand hover:text-brand-deep">
             Learn more
           </a>
         </div>

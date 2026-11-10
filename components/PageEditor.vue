@@ -1,6 +1,6 @@
 <template>
   <div v-if="ready && member?.is_admin" class="mb-8">
-    <div v-if="!editing" class="flex items-center gap-4"><button @click="begin" :disabled="busy" class="text-red-800 font-semibold underline disabled:opacity-50">{{ busy ? 'Opening editor…' : 'Edit page' }}</button><span v-if="notice" role="status" class="text-neutral-600">{{ notice }}</span></div>
+    <div v-if="!editing" class="flex items-center gap-4"><button @click="begin" :disabled="busy" class="text-brand font-semibold underline disabled:opacity-50">{{ busy ? 'Opening editor…' : 'Edit page' }}</button><span v-if="notice" role="status" class="text-neutral-600">{{ notice }}</span></div>
     <form v-else @submit.prevent="publish" class="bg-white border border-neutral-300 rounded-2xl p-6 sm:p-8 space-y-6">
       <h2 class="text-2xl font-bold">Edit {{ definition.label }}</h2>
       <template v-for="field in definition.fields" :key="field.key">
@@ -10,15 +10,15 @@
             <summary class="font-semibold cursor-pointer">{{ item.name || 'New ' + field.singular }}</summary>
             <div class="space-y-4 mt-4">
               <PageEditorField v-for="child in field.fields.filter(child => child.key !== 'id')" :key="child.key" v-model="item[child.key]" :field="child" :id="pageId + '-' + field.key + '-' + index + '-' + child.key" />
-              <div v-if="!field.fixed" class="flex flex-wrap gap-5"><button type="button" :disabled="index === 0" @click="move(field.key,index,-1)" class="text-red-800 underline disabled:opacity-40">Move up</button><button type="button" :disabled="index === draft[field.key].length - 1" @click="move(field.key,index,1)" class="text-red-800 underline disabled:opacity-40">Move down</button><button type="button" @click="draft[field.key].splice(index,1)" class="text-red-800 underline">Remove</button></div>
+              <div v-if="!field.fixed" class="flex flex-wrap gap-5"><button type="button" :disabled="index === 0" @click="move(field.key,index,-1)" class="text-brand underline disabled:opacity-40">Move up</button><button type="button" :disabled="index === draft[field.key].length - 1" @click="move(field.key,index,1)" class="text-brand underline disabled:opacity-40">Move down</button><button type="button" @click="draft[field.key].splice(index,1)" class="text-brand underline">Remove</button></div>
             </div>
           </details>
-          <button v-if="!field.fixed" type="button" :disabled="draft[field.key].length >= field.max" @click="add(field)" class="text-red-800 font-semibold underline disabled:opacity-40">Add {{ field.singular }}</button>
+          <button v-if="!field.fixed" type="button" :disabled="draft[field.key].length >= field.max" @click="add(field)" class="text-brand font-semibold underline disabled:opacity-40">Add {{ field.singular }}</button>
         </fieldset>
         <PageEditorField v-else v-model="draft[field.key]" :field="field" :id="pageId + '-' + field.key" />
       </template>
       <p v-if="error" role="alert" class="text-red-800">{{ error }}</p>
-      <div class="flex gap-5 items-center"><button :disabled="busy" class="bg-red-800 text-white font-semibold px-5 py-3 rounded-lg disabled:opacity-50">{{ busy ? 'Saving…' : 'Save changes' }}</button><button type="button" :disabled="busy" @click="cancel" class="text-neutral-700 underline">Cancel</button></div>
+      <div class="flex gap-5 items-center"><button :disabled="busy" class="bg-brand-fill text-brand-on-fill font-semibold px-5 py-3 rounded-lg disabled:opacity-50">{{ busy ? 'Saving…' : 'Save changes' }}</button><button type="button" :disabled="busy" @click="cancel" class="text-neutral-700 underline">Cancel</button></div>
     </form>
     <p v-if="!editing && (error || loadError)" role="alert" class="text-red-800 mt-3">{{ error || loadError }}</p>
   </div>

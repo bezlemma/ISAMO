@@ -7,11 +7,11 @@
       <template v-else-if="member">
         <div>
           <p class="text-neutral-700">Signed in as <strong>{{ member.name }}</strong><span v-if="member.is_admin"> (administrator)</span></p>
-          <div class="flex gap-4 mt-2 text-sm"><NuxtLink to="/membership" class="text-red-800 underline">Your account</NuxtLink><button @click="logOut" :disabled="signingOut" class="text-red-800 underline disabled:opacity-50">{{ signingOut ? 'Signing out…' : 'Sign out' }}</button></div>
+          <div class="flex gap-4 mt-2 text-sm"><NuxtLink to="/membership" class="text-brand underline">Your account</NuxtLink><button @click="logOut" :disabled="signingOut" class="text-brand underline disabled:opacity-50">{{ signingOut ? 'Signing out…' : 'Sign out' }}</button></div>
         </div>
         <button v-if="!composing" @click="startPost" class="primary">Write a Post</button>
       </template>
-      <NuxtLink v-else :to="eventRequest ? '/membership?next=event' : '/membership'" class="text-red-800 font-semibold underline">{{ eventRequest ? 'Sign in to share an event' : 'Sign in to your ISAMO account to post or reply' }}</NuxtLink>
+      <NuxtLink v-else :to="eventRequest ? '/membership?next=event' : '/membership'" class="text-brand font-semibold underline">{{ eventRequest ? 'Sign in to share an event' : 'Sign in to your ISAMO account to post or reply' }}</NuxtLink>
     </div>
     <form v-if="ready && composing && member" @submit.prevent="save" class="bg-white border border-neutral-200 rounded-2xl p-6 sm:p-8 space-y-4 mb-8">
       <h2 class="text-2xl font-bold">{{ draft.kind === 'event' ? (editing ? 'Edit Event' : 'Share an Event') : (editing ? 'Edit Post' : 'Write a Post') }}</h2>
@@ -26,24 +26,24 @@
       <div class="flex gap-4"><button :disabled="saving" class="primary">{{ saving ? 'Saving…' : editing ? 'Save Changes' : draft.kind === 'event' ? 'Publish Event' : 'Publish Post' }}</button><button type="button" @click="composing = false" class="px-4 py-3 text-neutral-600">Cancel</button></div>
     </form>
     <p v-if="loading" role="status" class="text-neutral-600 py-8">Loading posts…</p>
-    <div v-if="error" role="alert" class="bg-white border border-neutral-200 rounded-xl p-6 mb-6"><p>{{ error }}</p><button @click="load()" class="text-red-800 font-semibold underline mt-3">Try again</button></div>
-    <p v-if="removed" role="status" class="mb-6">Post removed. <button @click="undo" class="text-red-800 font-semibold underline">Undo</button></p>
+    <div v-if="error" role="alert" class="bg-white border border-neutral-200 rounded-xl p-6 mb-6"><p>{{ error }}</p><button @click="load()" class="text-brand font-semibold underline mt-3">Try again</button></div>
+    <p v-if="removed" role="status" class="mb-6">Post removed. <button @click="undo" class="text-brand font-semibold underline">Undo</button></p>
     <div v-if="!loading && !error && !posts.length" class="text-center py-20 border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50"><p class="text-slate-600 text-lg">No posts yet.</p></div>
     <article v-for="post in posts" :key="post.id" class="bg-white border border-neutral-200 rounded-2xl p-6 sm:p-8 mb-6">
       <p class="text-sm text-neutral-500 mb-3">{{ post.author }}<span v-if="post.institution"> · {{ post.institution }}</span> · {{ formatDate(post.created) }}</p>
       <h2 class="text-2xl font-bold mb-4 break-words">{{ post.title }}</h2>
-      <p v-if="post.kind === 'event'" class="text-red-800 font-semibold mb-3">{{ formatDate(post.event_date + 'T12:00:00') }}</p>
+      <p v-if="post.kind === 'event'" class="text-brand font-semibold mb-3">{{ formatDate(post.event_date + 'T12:00:00') }}</p>
       <p class="whitespace-pre-wrap break-words text-neutral-700 leading-7">{{ post.body }}</p>
-      <a v-if="post.link" :href="post.link" target="_blank" rel="noopener noreferrer" class="inline-block text-red-800 font-semibold underline mt-4">Visit website</a>
+      <a v-if="post.link" :href="post.link" target="_blank" rel="noopener noreferrer" class="inline-block text-brand font-semibold underline mt-4">Visit website</a>
       <div class="flex flex-wrap gap-5 text-sm mt-6">
-        <button @click="toggleReplies(post.id)" class="text-red-800 font-semibold">{{ openReplies === post.id ? 'Hide Replies' : 'Replies' }}</button>
+        <button @click="toggleReplies(post.id)" class="text-brand font-semibold">{{ openReplies === post.id ? 'Hide Replies' : 'Replies' }}</button>
         <template v-if="member && (member.id === post.author_id || member.is_admin)"><button @click="editPost(post)" class="text-neutral-600">Edit</button><button @click="remove(post.id)" class="text-neutral-600">Remove</button></template>
       </div>
       <section v-if="openReplies === post.id" class="mt-6 pt-6 border-t border-neutral-200" aria-label="Replies">
         <p v-if="replyError" role="alert" class="text-red-800 mb-4">{{ replyError }}</p>
         <div v-for="reply in replies" :key="reply.id" class="mb-5"><p class="font-semibold text-sm mb-1">{{ reply.author }} <span class="text-neutral-500 font-normal">· {{ formatDate(reply.created) }}</span></p><p class="whitespace-pre-wrap break-words text-neutral-700">{{ reply.body }}</p><button v-if="member && (member.id === reply.author_id || member.is_admin)" @click="removeReply(reply.id, post.id)" class="text-sm text-neutral-500 underline mt-2">Remove reply</button></div>
         <form v-if="ready && member" @submit.prevent="addReply(post.id)" class="space-y-3"><label :for="'reply-' + post.id" class="block font-medium">Replying as {{ member.name }}</label><textarea :id="'reply-' + post.id" v-model="replyText" required maxlength="4000" rows="3" class="field" /><button :disabled="replyBusy" class="primary">{{ replyBusy ? 'Posting…' : 'Post Reply' }}</button></form>
-        <NuxtLink v-else-if="ready" to="/membership" class="text-red-800 underline">Sign in to reply</NuxtLink>
+        <NuxtLink v-else-if="ready" to="/membership" class="text-brand underline">Sign in to reply</NuxtLink>
       </section>
     </article>
     <button v-if="next" @click="load(true)" :disabled="loading" class="primary">Load More</button>
@@ -85,5 +85,5 @@ useHead({ title: 'Community | ISAMO' });
 </script>
 <style scoped>
 .field { @apply w-full bg-neutral-50 border border-neutral-200 rounded-lg px-4 py-3 text-neutral-900; }
-.primary { @apply bg-red-800 hover:bg-red-900 disabled:opacity-50 px-5 py-3 rounded-lg font-semibold text-white; }
+.primary { @apply bg-brand-fill hover:bg-brand-hover disabled:opacity-50 px-5 py-3 rounded-lg font-semibold text-brand-on-fill; }
 </style>

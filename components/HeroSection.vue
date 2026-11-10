@@ -8,18 +8,18 @@
     </div>
 
     <div class="relative z-10 text-center px-4 max-w-5xl mx-auto flex flex-col items-center">
-      <h1 class="text-6xl md:text-8xl font-bold tracking-tight mb-8 text-neutral-900 drop-shadow-sm">
+      <h1 class="text-6xl max-[374px]:text-[2.625rem] md:text-8xl font-bold tracking-tight mb-8 text-neutral-900 drop-shadow-sm">
         International Society for <br />
-        <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-700 via-red-600 to-red-800">
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand via-brand-highlight to-brand-deep">
           Avian Model Organisms
         </span>
       </h1>
 
       <div class="flex flex-col sm:flex-row gap-6 justify-center items-center mt-8">
-        <NuxtLink to="/membership" class="px-10 py-4 bg-red-800 text-white rounded-full font-bold text-lg hover:bg-red-900 transition-all hover:-translate-y-1 shadow-xl shadow-red-900/20 border border-red-700">
+        <NuxtLink to="/membership" class="px-10 py-4 bg-brand-fill text-brand-on-fill rounded-full font-bold text-lg hover:bg-brand-hover transition-all hover:-translate-y-1 shadow-xl shadow-brand-deep/20 border border-brand">
           Become a Member
         </NuxtLink>
-        <NuxtLink to="/events" class="px-10 py-4 bg-white text-neutral-900 border-2 border-neutral-200 rounded-full font-bold text-lg hover:border-red-800 hover:text-red-800 transition-all hover:-translate-y-1">
+        <NuxtLink to="/events" class="px-10 py-4 bg-white text-neutral-900 border-2 border-neutral-200 rounded-full font-bold text-lg hover:border-brand hover:text-brand transition-all hover:-translate-y-1">
           View Events
         </NuxtLink>
       </div>
@@ -27,7 +27,7 @@
     <button
       v-if="imagesReady"
       type="button"
-      class="motion-toggle absolute bottom-5 left-5 z-20 flex h-11 w-11 items-center justify-center rounded-full border border-neutral-200 bg-white/80 text-neutral-600 hover:text-red-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-red-800"
+      class="motion-toggle absolute bottom-5 left-5 z-20 flex h-11 w-11 items-center justify-center rounded-full border border-neutral-200 bg-white/80 text-neutral-600 hover:text-brand focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
       :aria-label="paused ? 'Resume bird animation' : 'Pause bird animation'"
       :title="paused ? 'Resume bird animation' : 'Pause bird animation'"
       @click="paused = !paused"
