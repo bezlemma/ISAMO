@@ -36,3 +36,7 @@
   --brand-line: 174 209 198;
   --brand-surface: 246 250 248;
 }
+
+main h1 {
+  color: rgb(var(--brand));
+}

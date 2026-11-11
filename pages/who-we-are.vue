@@ -1,6 +1,6 @@
 <template>
   <div class="pt-8 pb-16">
-    <div class="max-w-7xl mx-auto px-6 lg:px-8"><h1 class="text-4xl md:text-5xl font-bold text-slate-900 mb-10">{{ content.title }}</h1><PageEditor page-id="who-we-are" /><nav aria-label="People and contact" class="flex flex-wrap gap-6 text-brand font-semibold mb-4"><a href="#trustees">{{ content.trusteesTitle }}</a><a href="#advisory-board">{{ content.boardTitle }}</a><a href="#contact">{{ content.contactTitle }}</a></nav></div>
+    <div class="max-w-7xl mx-auto px-6 lg:px-8"><h1 class="text-4xl md:text-5xl font-bold mb-10">{{ content.title }}</h1><PageEditor page-id="who-we-are" /><nav aria-label="People and contact" class="flex flex-wrap gap-6 text-brand font-semibold mb-4"><a href="#trustees">{{ content.trusteesTitle }}</a><a href="#advisory-board">{{ content.boardTitle }}</a><a href="#contact">{{ content.contactTitle }}</a></nav></div>
     <CommitteeDirectory :team="content.trustees" :title="content.trusteesTitle" :introduction="content.trusteesDescription" />
     <div class="max-w-7xl mx-auto px-6 lg:px-8">
       <section id="advisory-board" class="py-12 border-b border-neutral-200 scroll-mt-8">

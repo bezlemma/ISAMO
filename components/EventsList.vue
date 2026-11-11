@@ -1,7 +1,7 @@
 <template>
   <div class="pt-8 pb-12 px-4 max-w-7xl mx-auto">
     <div class="text-center mb-16">
-      <h1 class="text-4xl md:text-5xl font-bold mb-4 text-slate-900">{{ content.title }}</h1>
+      <h1 class="text-4xl md:text-5xl font-bold mb-4">{{ content.title }}</h1>
 
     </div>
 
