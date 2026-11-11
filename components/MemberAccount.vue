@@ -2,7 +2,7 @@
   <div class="pt-8 pb-12 px-4 max-w-3xl mx-auto">
     <div v-if="member" class="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
       <div class="flex items-center justify-between gap-4 mb-8">
-        <h1 class="text-3xl font-bold text-neutral-900">Welcome, {{ member.name }}</h1>
+        <h1 class="text-3xl font-bold">Welcome, {{ member.name }}</h1>
         <button @click="logout" class="text-sm text-brand font-semibold">Sign Out</button>
       </div>
       <div v-if="recovery" class="rounded-xl border border-brand-line bg-brand-soft p-6 mb-8">
@@ -45,7 +45,7 @@
     </div>
     <div v-else :class="mode === 'register' ? 'max-w-xl mx-auto' : 'max-w-md mx-auto'">
       <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold mb-2 text-neutral-900">{{ mode === 'register' ? 'Create Account' : ['recover','request-reset'].includes(mode) ? 'Reset Password' : 'Member Login' }}</h1>
+        <h1 class="text-3xl font-bold mb-2">{{ mode === 'register' ? 'Create Account' : ['recover','request-reset'].includes(mode) ? 'Reset Password' : 'Member Login' }}</h1>
         <p class="text-neutral-600">{{ mode === 'register' ? 'Join the ISAMO community.' : mode === 'recover' ? 'Enter the recovery code saved when you created your account.' : mode === 'request-reset' ? 'Enter your account email to receive a password reset link.' : 'Sign in to post and reply.' }}</p>
         <p v-if="['login','register'].includes(mode)" class="text-neutral-600 mt-4">{{ membershipPurpose }}</p>
       </div>
