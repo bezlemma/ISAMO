@@ -5,7 +5,7 @@
     </div>
     <PageEditor page-id="resources" />
     <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-      <a v-for="resource in content.resources" :key="resource.url" :href="resource.url" target="_blank" rel="noopener noreferrer" class="group block bg-white border border-neutral-200 rounded-2xl p-8 hover:border-brand-line transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-brand-deep/5">
+      <a v-for="resource in content.resources" :key="resource.url" :href="resource.url" target="_blank" rel="noopener noreferrer" :class="{ 'chickybase-highlight': isChickyBase(resource.url) }" class="group block bg-white border border-neutral-200 rounded-2xl p-8 hover:border-brand-line transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-brand-deep/5">
         <ResourceLogo :resource="resource" />
         <h2 class="text-2xl font-bold mb-3 text-neutral-900 group-hover:text-brand transition-colors">{{ resource.name }}</h2>
         <p class="text-neutral-600 mb-4">{{ resource.description }}</p>
@@ -32,6 +32,10 @@
 <script setup>
 const { content } = useSitePage('resources');
 const { baseURL } = useRuntimeConfig().app;
+function isChickyBase(url) {
+  try { return new URL(url).hostname.replace(/^www\./, '') === 'chickybase.com'; }
+  catch { return false; }
+}
 const embryos = [
   { file: 'embryo-hh7.png', stage: 'HH7' },
   { file: 'embryo-7ss.png', stage: '7 somites' },
@@ -39,3 +43,32 @@ const embryos = [
 ];
 useHead(() => ({ title: content.value.title + ' | ISAMO' }));
 </script>
+
+<style scoped>
+.chickybase-highlight {
+  position: relative;
+  border-color: rgb(var(--brand-highlight) / 0.5);
+  background-color: rgb(var(--brand-soft));
+}
+.chickybase-highlight::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: 0 0 0 3px rgb(var(--brand-highlight) / 0.14), 0 0 22px rgb(var(--brand-highlight) / 0.2);
+  opacity: 0.2;
+  animation: chickybase-glow 5s ease-in-out 3;
+}
+.chickybase-highlight:hover::before,
+.chickybase-highlight:focus-visible::before {
+  animation-play-state: paused;
+}
+@keyframes chickybase-glow {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .chickybase-highlight::before { animation: none; }
+}
+</style>

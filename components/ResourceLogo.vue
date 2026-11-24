@@ -30,8 +30,7 @@ const logos = {
   'agr.nagoya-u.ac.jp': { file: 'nagoya.svg' },
   'animalscience.ucdavis.edu': { file: 'uc-davis.svg' },
   'pirbright.ac.uk': { file: 'pirbright.svg' },
-  'quail.anatomyportal.org': { label: 'Quail Anatomy Portal' },
-  'gallusresources.org': { label: 'Gallus Genetic Resource Center' }
+  'quail.anatomyportal.org': { label: 'Quail Anatomy Portal' }
 };
 const logo = computed(() => logos[host.value]);
 watch(() => props.resource.url, () => { failed.value = false; });
