@@ -12,12 +12,6 @@
     "description": "Search chicken expression images by gene, anatomy, and embryonic stage; compare patterns and explore transcriptomics."
   },
   {
-    "name": "GEISHA anatomy browser",
-    "category": "Expression and anatomy",
-    "url": "https://geisha.arizona.edu/anatomies.jsp",
-    "description": "Browse embryonic structures and find their associated gene-expression records."
-  },
-  {
     "name": "ChickenGTEx",
     "category": "Transcriptomics",
     "url": "https://ngdc.cncb.ac.cn/chickengtex/",
@@ -73,12 +67,6 @@
     "location": "Edinburgh, United Kingdom"
   },
   {
-    "name": "GEISHA bird-line directory",
-    "category": "Research materials",
-    "url": "https://geisha.arizona.edu/transgenic_birds.jsp",
-    "description": "Find fluorescent reporter and other genetically edited avian lines and their source facilities."
-  },
-  {
     "name": "PubMed: chicken embryology",
     "category": "Literature",
     "url": "https://pubmed.ncbi.nlm.nih.gov/?term=%28chick+OR+chicken%29+embryo",
@@ -96,13 +84,6 @@
     "location": "Nagoya, Japan",
     "url": "https://www.agr.nagoya-u.ac.jp/~abrc/abrc-E/index.html",
     "description": "Maintains and distributes chicken and quail genetic resources through Japan’s National BioResource Project."
-  },
-  {
-    "name": "National BioResource Project · Chicken and Quail",
-    "category": "Research materials",
-    "location": "Japan",
-    "url": "https://www.agr.nagoya-u.ac.jp/~nbrp/en/index.html",
-    "description": "Browse chicken and quail strains, including inbred lines, reporter lines, and disease models, with information on requesting resources."
   },
   {
     "name": "University of California, Davis · Avian Facilities",
