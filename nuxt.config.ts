@@ -4,6 +4,10 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
   modules: ['@nuxtjs/tailwindcss'],
   css: ['~/assets/themes.css'],
+  vite: {
+    // Nuxt imports unctx by both package name and resolved path during prerendering.
+    ssr: { noExternal: ['unctx'] }
+  },
   runtimeConfig: {
     public: {
       communityUrl: 'http://127.0.0.1:8787',

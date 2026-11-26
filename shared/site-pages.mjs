@@ -1,5 +1,6 @@
 import resources from '../data/chicken-resources.json' with { type: 'json' };
 import trustees from '../data/committee.json' with { type: 'json' };
+import board from '../data/advisory-board.json' with { type: 'json' };
 import series from '../data/event-series.json' with { type: 'json' };
 
 const text = (key, label, max = 200, optional = false) => ({ key, label, type: 'text', max, optional });
@@ -17,7 +18,7 @@ export const pageDefaults = {
   about: { title: 'What is ISAMO?', missionTitle: 'Our mission', mission: 'Through promoting open scientific exchange and interdisciplinary collaboration, the International Society for Avian Model Organisms (ISAMO) supports innovation and the generation of new knowledge about avian model systems that has potential broader societal and scientific impact. Research using avian models provides critical insight into the mechanisms underlying development, health, and disease.\n\nISAMO seeks to promote the use of avian model organisms globally, including the chicken, quail, songbirds and ducks, which offer unique advantages due to their experimental accessibility, versatility, and evolutionary position among vertebrates. This work contributes directly to biomedical research, including disease modelling and translational medicine, and interfaces closely with related disciplines such as molecular and cellular biology, genetics, immunology, neuroscience, and behavioural science.' },
   events: { title: 'Events', series },
   resources: { title: 'Scientific Resources', resources },
-  'who-we-are': { title: 'Who are we?', trusteesTitle: 'Trustees', trusteesDescription: 'Our trustees oversee the society’s activities, membership and finances.', trustees, boardTitle: 'Scientific Advisory Board', boardDescription: 'The board advises the trustees on the society’s scientific activities.', board: [{ name: 'Susanne Dietrich', institution: 'University of Portsmouth', website: 'https://www.port.ac.uk/about-us/structure-and-governance/our-people/our-staff/susanne-dietrich' }, { name: 'Parker Antin', institution: 'University of Arizona', website: 'https://profiles.arizona.edu/person/pba' }], contactTitle: 'Contact us', contactDescription: 'For membership, events and society enquiries, email:', email: 'admin@avianmodel.org' }
+  'who-we-are': { title: 'Who are we?', trusteesTitle: 'Trustees', trusteesDescription: 'Our trustees oversee the society’s activities, membership and finances.', trustees, boardTitle: 'Scientific Advisory Board', boardDescription: 'The board advises the trustees on the society’s scientific activities.', board, contactTitle: 'Contact us', contactDescription: 'For membership, events and society enquiries, email:', email: 'admin@avianmodel.org' }
 };
 
 export function validatePage(page, content) {
