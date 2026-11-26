@@ -10,7 +10,7 @@
     </div>
 
     <div class="relative z-10 text-center px-4 max-w-5xl mx-auto flex flex-col items-center">
-      <h1 class="text-6xl max-[374px]:text-[2.625rem] md:text-8xl font-bold tracking-tight mb-8 drop-shadow-sm">
+      <h1 class="text-[2.8125rem] max-[374px]:text-[1.96875rem] md:text-7xl leading-none font-bold tracking-tight mb-8 drop-shadow-sm">
         International Society for <br />
         <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand via-brand-highlight to-brand-deep">
           Avian Model Organisms
